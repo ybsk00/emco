@@ -92,8 +92,8 @@
   <g font-family="'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans CJK KR', sans-serif" fill="#4A3F35">
     <!-- 배지 -->
     <g transform="translate(490 140)">
-      <rect x="0" y="0" width="370" height="48" rx="24" fill="#FFEEB0" stroke="#FFD668" stroke-width="2"/>
-      <text x="22" y="32" font-size="22" font-weight="700" fill="#B88C20">⭐ 평일 야간 21시 · 주말·공휴일 진료</text>
+      <rect x="0" y="0" width="430" height="48" rx="24" fill="#FFEEB0" stroke="#FFD668" stroke-width="2"/>
+      <text x="22" y="32" font-size="20" font-weight="700" fill="#B88C20">⭐ 야간 20시 · 토·일·공휴일 진료 (수요일 휴진)</text>
     </g>
 
     <!-- 메인 헤드라인 -->
