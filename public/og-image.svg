@@ -93,7 +93,7 @@
     <!-- 배지 -->
     <g transform="translate(490 140)">
       <rect x="0" y="0" width="430" height="48" rx="24" fill="#FFEEB0" stroke="#FFD668" stroke-width="2"/>
-      <text x="22" y="32" font-size="20" font-weight="700" fill="#B88C20">⭐ 야간 20시 · 토·일·공휴일 진료 (수요일 휴진)</text>
+      <text x="22" y="32" font-size="20" font-weight="700" fill="#B88C20">⭐ 야간 20시 · 토·일·공휴일 진료 (수요일 정기휴무)</text>
     </g>
 
     <!-- 메인 헤드라인 -->
