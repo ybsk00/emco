@@ -5,32 +5,21 @@
     - emco-supabase-key  ← SUPABASE_SERVICE_ROLE_KEY
     - emco-gemini-key    ← GEMINI_API_KEY
     - emco-ip-salt       ← IP_HASH_SALT
-
-  ⚠️ 키 값은 stdout/log 어디에도 출력되지 않고, 임시 파일은 즉시 삭제됩니다.
-
-  사용법:
-    cd api
-    .\setup-gcp-secrets.ps1                       # 현재 gcloud project
-    .\setup-gcp-secrets.ps1 -Project emco-8a3b5   # 명시 지정
-
-  사전 조건:
-    - gcloud auth login 완료
-    - Secret Manager API 활성화
-      (gcloud services enable secretmanager.googleapis.com)
 #>
 param(
   [string]$Project = "",
   [string]$EnvFile = ".env"
 )
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 if (-not (Test-Path $EnvFile)) {
-  Write-Error "$EnvFile 가 없습니다. cd api 후 실행해 주세요."
+  Write-Host "ERROR: $EnvFile not found. Run from api/ directory." -ForegroundColor Red
   exit 1
 }
 
-# .env 파싱 — KEY=VALUE 형식 (주석 #, 빈 줄 제외)
+# Parse .env
 $envValues = @{}
 foreach ($line in Get-Content $EnvFile) {
   if ($line -match '^\s*#' -or $line -match '^\s*$') { continue }
@@ -39,53 +28,58 @@ foreach ($line in Get-Content $EnvFile) {
   }
 }
 
-# 등록할 시크릿 매핑
 $secretMap = @(
-  @{ Name = "emco-supabase-key"; EnvKey = "SUPABASE_SERVICE_ROLE_KEY" }
-  @{ Name = "emco-gemini-key";   EnvKey = "GEMINI_API_KEY" }
-  @{ Name = "emco-ip-salt";      EnvKey = "IP_HASH_SALT" }
+  [PSCustomObject]@{ Name = "emco-supabase-key"; Key = "SUPABASE_SERVICE_ROLE_KEY" }
+  [PSCustomObject]@{ Name = "emco-gemini-key";   Key = "GEMINI_API_KEY" }
+  [PSCustomObject]@{ Name = "emco-ip-salt";      Key = "IP_HASH_SALT" }
 )
 
-$projectArg = @()
-if ($Project) { $projectArg = @("--project", $Project) }
+$projectArgs = @()
+if ($Project) { $projectArgs = @("--project", $Project) }
 
-Write-Host "==== GCP Secret Manager 등록 시작 ====" -ForegroundColor Cyan
+Write-Host "==== GCP Secret Manager Registration ====" -ForegroundColor Cyan
 if ($Project) { Write-Host "Project: $Project" }
 
-foreach ($secret in $secretMap) {
-  $name = $secret.Name
-  $key  = $secret.EnvKey
+foreach ($s in $secretMap) {
+  $name = $s.Name
+  $key  = $s.Key
   $value = $envValues[$key]
 
   if ([string]::IsNullOrWhiteSpace($value)) {
-    Write-Warning "  $name : .env 에 $key 가 비어있어 건너뜁니다."
+    Write-Host "  [$name] $key is empty in .env, skipping." -ForegroundColor Yellow
     continue
   }
 
-  # 임시 파일 — ASCII, BOM/newline 없음
-  $tmp = [System.IO.Path]::GetTempFileName()
-  try {
-    [System.IO.File]::WriteAllText($tmp, $value, [System.Text.UTF8Encoding]::new($false))
+  # Temp data file for the secret value (no BOM, no newline)
+  $tmpDat = Join-Path $env:TEMP ("secret_" + [System.Guid]::NewGuid().ToString("N") + ".dat")
+  [System.IO.File]::WriteAllText($tmpDat, $value, [System.Text.UTF8Encoding]::new($false))
 
-    # 이미 존재하나?
-    $null = & gcloud secrets describe $name @projectArg --format=value(name) 2>$null
-    if ($LASTEXITCODE -eq 0) {
-      Write-Host "  $name : 새 버전 추가 ..." -NoNewline
-      $null = & gcloud secrets versions add $name --data-file=$tmp @projectArg --quiet 2>&1
+  try {
+    # Existence check (capture stderr; ignore message, only check exit code)
+    $describeArgs = @("secrets", "describe", $name) + $projectArgs + @("--format=value(name)")
+    & gcloud @describeArgs *> $null
+    $exists = ($LASTEXITCODE -eq 0)
+
+    if ($exists) {
+      Write-Host -NoNewline "  [$name] add new version ... "
+      $cmdArgs = @("secrets", "versions", "add", $name, "--data-file=$tmpDat") + $projectArgs + @("--quiet")
     } else {
-      Write-Host "  $name : 신규 생성 ..." -NoNewline
-      $null = & gcloud secrets create $name --data-file=$tmp --replication-policy=automatic @projectArg --quiet 2>&1
+      Write-Host -NoNewline "  [$name] create new ... "
+      $cmdArgs = @("secrets", "create", $name, "--data-file=$tmpDat", "--replication-policy=automatic") + $projectArgs + @("--quiet")
     }
+
+    & gcloud @cmdArgs *> $null
     if ($LASTEXITCODE -eq 0) {
-      Write-Host " OK ($(($value).Length) chars)" -ForegroundColor Green
+      Write-Host "OK ($($value.Length) chars)" -ForegroundColor Green
     } else {
-      Write-Host " FAILED" -ForegroundColor Red
+      Write-Host "FAILED (exit $LASTEXITCODE)" -ForegroundColor Red
     }
   } finally {
-    Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath $tmpDat -Force -ErrorAction SilentlyContinue
   }
 }
 
 Write-Host ""
-Write-Host "현재 등록된 시크릿:" -ForegroundColor Cyan
-& gcloud secrets list @projectArg --filter="name~^projects/.*/secrets/emco-" --format="table(name.basename(),createTime.date('%Y-%m-%d %H:%M'))"
+Write-Host "Registered emco-* secrets:" -ForegroundColor Cyan
+$listArgs = @("secrets", "list") + $projectArgs + @("--filter=name~emco-", "--format=table(name.basename(),createTime.date('%Y-%m-%d %H:%M'))")
+& gcloud @listArgs

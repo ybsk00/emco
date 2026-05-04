@@ -1,0 +1,24 @@
+# Cloud Build 업로드 제외 — node_modules는 Dockerfile RUN 시 다시 받음
+.gcloudignore
+.gitignore
+.git/
+
+# secrets
+.env
+.env.*
+!.env.example
+
+# build outputs / deps
+node_modules/
+dist/
+*.tsbuildinfo
+
+# logs
+*.log
+cloudbuild.log
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+.cache/

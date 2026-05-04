@@ -12,12 +12,13 @@
 substitutions:
   _SERVICE_NAME: emco-chatbot-api
   _REGION: asia-northeast3
-  _IMAGE: asia-northeast3-docker.pkg.dev/$PROJECT_ID/cloudrun/emco-chatbot-api
+  # NOTE: user substitutions (_IMAGE 등) 안에서는 $PROJECT_ID 가 치환되지 않으므로 직접 박는다
+  _IMAGE: asia-northeast3-docker.pkg.dev/emco-8a3b5/cloudrun/emco-chatbot-api
 
 steps:
   - name: gcr.io/cloud-builders/docker
     id: Build
-    args: ['build', '-t', '${_IMAGE}:$COMMIT_SHA', '-t', '${_IMAGE}:latest', '.']
+    args: ['build', '-t', '${_IMAGE}:$BUILD_ID', '-t', '${_IMAGE}:latest', '.']
 
   - name: gcr.io/cloud-builders/docker
     id: Push
@@ -30,7 +31,7 @@ steps:
       - run
       - deploy
       - ${_SERVICE_NAME}
-      - --image=${_IMAGE}:$COMMIT_SHA
+      - --image=${_IMAGE}:$BUILD_ID
       - --region=${_REGION}
       - --platform=managed
       - --allow-unauthenticated
@@ -45,7 +46,7 @@ steps:
       - --set-secrets=SUPABASE_SERVICE_ROLE_KEY=emco-supabase-key:latest,GEMINI_API_KEY=emco-gemini-key:latest,IP_HASH_SALT=emco-ip-salt:latest
 
 images:
-  - '${_IMAGE}:$COMMIT_SHA'
+  - '${_IMAGE}:$BUILD_ID'
   - '${_IMAGE}:latest'
 
 options:
