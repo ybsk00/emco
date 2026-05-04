@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase.js';
-import { embed } from '../lib/embedding.js';
+import { embedQuery } from '../lib/embedding.js';
 import type { Category, SearchResult } from '../types/chatbot.js';
 
 const SIMILARITY_THRESHOLD = 0.30;
@@ -136,7 +136,7 @@ export class EmcoRetriever {
    * @param category undefined 면 전 카테고리. 카테고리 필터로 결과 부족 시 무필터 fallback.
    */
   async retrieve(query: string, k = 10, category?: Category): Promise<SearchResult[]> {
-    const queryVector = await embed(query);
+    const queryVector = await embedQuery(query);
     const keywords = expandSynonyms(extractKeywords(query));
 
     let [vectorResults, keywordResults] = await Promise.all([

@@ -43,7 +43,7 @@
 │   │   │       └── utils.ts
 │   │   ├── lib/
 │   │   │   ├── supabase.ts
-│   │   │   ├── embedding.ts             Gemini text-embedding-004 (768d)
+│   │   │   ├── embedding.ts             Gemini gemini-embedding-001 (output dim 768) (768d)
 │   │   │   └── gemini.ts
 │   │   ├── middleware/
 │   │   ├── types/

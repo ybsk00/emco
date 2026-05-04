@@ -41,7 +41,7 @@ steps:
       - --max-instances=10
       - --concurrency=40
       - --timeout=120s
-      - --set-env-vars=NODE_ENV=production,SUPABASE_URL=https://wltqkxesvtfwotcngzjj.supabase.co,GEMINI_MODEL=gemini-2.0-flash,GEMINI_EMBEDDING_MODEL=text-embedding-004,CORS_ORIGIN=https://emco-8a3b5.web.app,https://emco-8a3b5.firebaseapp.com
+      - --set-env-vars=NODE_ENV=production,SUPABASE_URL=https://wltqkxesvtfwotcngzjj.supabase.co,GEMINI_MODEL=gemini-2.0-flash,GEMINI_EMBEDDING_MODEL=gemini-embedding-001,CORS_ORIGIN=https://emco-8a3b5.web.app,https://emco-8a3b5.firebaseapp.com
       - --set-secrets=SUPABASE_SERVICE_ROLE_KEY=emco-supabase-key:latest,GEMINI_API_KEY=emco-gemini-key:latest,IP_HASH_SALT=emco-ip-salt:latest
 
 images:

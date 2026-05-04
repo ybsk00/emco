@@ -9,7 +9,7 @@ const schema = z.object({
 
   GEMINI_API_KEY: z.string().min(10),
   GEMINI_MODEL: z.string().default('gemini-2.0-flash'),
-  GEMINI_EMBEDDING_MODEL: z.string().default('text-embedding-004'),
+  GEMINI_EMBEDDING_MODEL: z.string().default('gemini-embedding-001'),
 
   CORS_ORIGIN: z.string().default(''),
   IP_HASH_SALT: z.string().min(16).default('emco-default-salt-change-me'),

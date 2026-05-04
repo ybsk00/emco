@@ -17,7 +17,10 @@
  */
 import 'dotenv/config';
 import { createClient } from '@supabase/supabase-js';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+
+const EMBED_DIM = 768;
+const EMBED_MODEL = process.env.GEMINI_EMBEDDING_MODEL || 'gemini-embedding-001';
+const EMBED_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${EMBED_MODEL}:embedContent`;
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://wltqkxesvtfwotcngzjj.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -32,8 +35,6 @@ if (!SUPABASE_KEY || !GEMINI_KEY) {
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
 });
-const ai = new GoogleGenerativeAI(GEMINI_KEY);
-const embedModel = ai.getGenerativeModel({ model: 'text-embedding-004' });
 
 type Cat = 'general' | 'vaccine' | 'checkup' | 'cold' | 'emergency' | 'growth' | 'teen';
 
@@ -202,8 +203,26 @@ async function alreadySeeded(pmids: string[]): Promise<Set<string>> {
 async function embedText(text: string): Promise<number[] | null> {
   try {
     const trimmed = text.slice(0, 7500);
-    const r = await embedModel.embedContent(trimmed);
-    return r.embedding?.values ?? null;
+    const res = await fetch(`${EMBED_ENDPOINT}?key=${GEMINI_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        content: { parts: [{ text: trimmed }] },
+        taskType: 'RETRIEVAL_DOCUMENT',
+        outputDimensionality: EMBED_DIM,
+      }),
+    });
+    const json: any = await res.json();
+    if (!res.ok || json.error) {
+      console.error('[seed-pubmed] embed error:', json.error?.message || res.status);
+      return null;
+    }
+    const values: number[] | undefined = json.embedding?.values;
+    if (!values || values.length !== EMBED_DIM) {
+      console.error('[seed-pubmed] embed dim mismatch:', values?.length);
+      return null;
+    }
+    return values;
   } catch (err) {
     console.error('[seed-pubmed] embed error:', (err as Error).message);
     return null;

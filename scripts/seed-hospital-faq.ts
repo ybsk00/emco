@@ -6,7 +6,10 @@
  */
 import 'dotenv/config';
 import { createClient } from '@supabase/supabase-js';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+
+const EMBED_DIM = 768;
+const EMBED_MODEL = process.env.GEMINI_EMBEDDING_MODEL || 'gemini-embedding-001';
+const EMBED_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${EMBED_MODEL}:embedContent`;
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://wltqkxesvtfwotcngzjj.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -20,7 +23,26 @@ if (!SUPABASE_KEY || !GEMINI_KEY) {
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
 });
-const ai = new GoogleGenerativeAI(GEMINI_KEY);
+
+async function embedDoc(text: string): Promise<number[] | null> {
+  const trimmed = text.slice(0, 7500);
+  const res = await fetch(`${EMBED_ENDPOINT}?key=${GEMINI_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      content: { parts: [{ text: trimmed }] },
+      taskType: 'RETRIEVAL_DOCUMENT',
+      outputDimensionality: EMBED_DIM,
+    }),
+  });
+  const json: any = await res.json();
+  if (!res.ok || json.error) {
+    console.error('[embed] error:', json.error?.message || res.status);
+    return null;
+  }
+  const values = json.embedding?.values;
+  return values && values.length === EMBED_DIM ? values : null;
+}
 
 type Cat = 'general' | 'vaccine' | 'checkup' | 'cold' | 'emergency' | 'growth' | 'teen';
 
@@ -265,8 +287,7 @@ const FAQS: FaqItem[] = [
 ];
 
 async function main() {
-  console.log(`[seed] ${FAQS.length}개 항목 시작`);
-  const embedModel = ai.getGenerativeModel({ model: 'text-embedding-004' });
+  console.log(`[seed] ${FAQS.length}개 항목 시작 (model=${EMBED_MODEL}, dim=${EMBED_DIM})`);
 
   let inserted = 0;
   let skipped = 0;
@@ -288,9 +309,8 @@ async function main() {
       }
 
       const text = `${faq.question}\n${faq.answer}`;
-      const embedRes = await embedModel.embedContent(text);
-      const embedding = embedRes.embedding?.values;
-      if (!embedding || embedding.length !== 768) {
+      const embedding = await embedDoc(text);
+      if (!embedding) {
         console.error(`[seed] embed 실패: ${faq.question}`);
         failed++;
         continue;
