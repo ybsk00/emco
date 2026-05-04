@@ -1463,6 +1463,14 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   .btn-primary:hover { transform: none; }
 }
 
+/* hero 떠다니는 hearts 가 모바일에서 hero-sub 텍스트와 겹치는 케이스 회피 */
+@media (max-width: 1024px) {
+  .hero-bg .float-slow,
+  .hero-bg .float-slow-2 {
+    display: none;
+  }
+}
+
 /* 매우 작은 화면 (320px iPhone SE 등) */
 @media (max-width: 360px) {
   .hero-title { font-size: 28px; }
