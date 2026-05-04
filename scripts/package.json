@@ -1,0 +1,23 @@
+{
+  "name": "emco-chatbot-scripts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "seed:hospital-faq": "tsx seed-hospital-faq.ts",
+    "seed:pubmed": "tsx seed-pubmed.ts",
+    "seed:pubmed:vaccine": "tsx seed-pubmed.ts --topic vaccine",
+    "seed:pubmed:cold": "tsx seed-pubmed.ts --topic cold",
+    "seed:pubmed:dryrun": "tsx seed-pubmed.ts --max 5"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@supabase/supabase-js": "^2.45.4",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2",
+    "@types/node": "^22.7.4"
+  }
+}

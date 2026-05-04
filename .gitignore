@@ -1,0 +1,40 @@
+# dependencies
+node_modules/
+
+# build outputs
+dist/
+build/
+api/dist/
+*.tsbuildinfo
+
+# ── secrets — 절대 commit 금지 ───────────────────────
+.env
+.env.*
+!.env.example
+*.local
+*.secret
+*.secrets
+
+# 흔히 새는 시크릿 파일들
+service-account*.json
+*-key.json
+*-credentials.json
+firebase-adminsdk*.json
+serviceAccountKey.json
+gcp-key.json
+*.pem
+*.p12
+
+# logs
+*.log
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# tooling/cache
+.firebase/
+.vscode/
+.idea/
+.cache/
+.DS_Store
+coverage/
