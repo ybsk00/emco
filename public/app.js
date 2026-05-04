@@ -77,6 +77,15 @@
     if (e.key === "Escape" && chatOpen) setChatOpen(false);
   });
 
+  // 닫기 버튼은 위임 외에 직접 리스너로 한 번 더 보장 (SVG <use> closest() edge case 회피)
+  document.querySelectorAll('[data-action="close-chat"]').forEach((el) => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setChatOpen(false);
+    });
+  });
+
   // ============ 세션 저장 / 복원 ============
   function restoreSession() {
     try {

@@ -7,7 +7,7 @@ export async function* generateGeneralAgentResponse(
   query: string,
   history: ChatTurn[],
 ): AsyncGenerator<string, void, unknown> {
-  const model = getModel({ temperature: 0.7, maxOutputTokens: 512 });
+  const model = getModel({ temperature: 0.7, maxOutputTokens: 2048 });
   const prompt = GENERAL_AGENT_PROMPT
     .replace('{history}', formatHistory(history, 4))
     .replace('{query}', query);

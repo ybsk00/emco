@@ -8,7 +8,7 @@ export async function* generateConsultationResponse(
   history: ChatTurn[],
   ragContext: SearchResult[],
 ): AsyncGenerator<string, void, unknown> {
-  const model = getModel({ temperature: 0.4, maxOutputTokens: 768 });
+  const model = getModel({ temperature: 0.4, maxOutputTokens: 3072 });
   const prompt = CONSULTATION_PROMPT
     .replace('{context}', formatRagContext(ragContext))
     .replace('{history}', formatHistory(history, 4))

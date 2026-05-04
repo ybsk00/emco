@@ -12,12 +12,16 @@ export const MEDICAL_SAFETY_SETTINGS = [
 ];
 
 export function getModel(opts?: { temperature?: number; maxOutputTokens?: number }) {
+  // gemini-2.5-flash 은 thinking mode 가 기본 ON 이라 maxOutputTokens 일부를 thinking 에 소진 →
+  // 실제 답변이 짧게 잘려 끊김. thinkingBudget=0 으로 비활성화하여 모든 토큰을 답변에 사용.
   return ai.getGenerativeModel({
     model: env.GEMINI_MODEL,
     safetySettings: MEDICAL_SAFETY_SETTINGS,
     generationConfig: {
       temperature: opts?.temperature ?? 0.7,
-      maxOutputTokens: opts?.maxOutputTokens ?? 1024,
+      maxOutputTokens: opts?.maxOutputTokens ?? 4096,
+      // @ts-expect-error — thinkingConfig 는 SDK 0.21 타입에 미반영, 런타임은 정상 처리
+      thinkingConfig: { thinkingBudget: 0 },
     },
   });
 }

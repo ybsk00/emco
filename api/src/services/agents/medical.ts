@@ -47,7 +47,7 @@ export async function* generateMedicalRagResponse(
   history: ChatTurn[],
   ragContext: SearchResult[],
 ): AsyncGenerator<string, void, unknown> {
-  const model = getModel({ temperature: 0.4, maxOutputTokens: 1024 });
+  const model = getModel({ temperature: 0.4, maxOutputTokens: 4096 });
   const prompt = MEDICAL_RAG_PROMPT
     .replace('{context}', formatRagContext(ragContext))
     .replace('{history}', formatHistory(history, 4))
@@ -64,7 +64,7 @@ export async function* generateMedicalFallbackResponse(
   query: string,
   history: ChatTurn[],
 ): AsyncGenerator<string, void, unknown> {
-  const model = getModel({ temperature: 0.3, maxOutputTokens: 768 });
+  const model = getModel({ temperature: 0.3, maxOutputTokens: 3072 });
   const prompt = MEDICAL_FALLBACK_PROMPT
     .replace('{history}', formatHistory(history, 4))
     .replace('{query}', query);
