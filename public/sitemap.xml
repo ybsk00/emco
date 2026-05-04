@@ -12,43 +12,17 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://emcokids.co.kr/"/>
   </url>
 
-  <!-- 단일 페이지 SPA 의 in-page anchors — 일부 검색엔진(특히 Naver)은 하위 anchor 도 색인 -->
-  <url>
-    <loc>https://emcokids.co.kr/#소개</loc>
-    <lastmod>2026-05-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://emcokids.co.kr/#진료</loc>
-    <lastmod>2026-05-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://emcokids.co.kr/#오시는길</loc>
-    <lastmod>2026-05-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://emcokids.co.kr/#블로그</loc>
-    <lastmod>2026-05-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://emcokids.co.kr/#faq</loc>
-    <lastmod>2026-05-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+  <url><loc>https://emcokids.co.kr/#소개</loc>      <lastmod>2026-05-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://emcokids.co.kr/#진료</loc>      <lastmod>2026-05-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://emcokids.co.kr/#오시는길</loc>  <lastmod>2026-05-04</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://emcokids.co.kr/#블로그</loc>    <lastmod>2026-05-04</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://emcokids.co.kr/#faq</loc>       <lastmod>2026-05-04</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- 블로그 글 6개 (emco.lumiaeo.com 원문으로 301 redirect) -->
-  <url><loc>https://emcokids.co.kr/blog/burn-first-aid</loc>      <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://emcokids.co.kr/blog/burn-home-prevention</loc><lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://emcokids.co.kr/blog/clinic-vs-er</loc>        <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://emcokids.co.kr/blog/flu-vaccine-family</loc>  <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://emcokids.co.kr/blog/post-vaccine-fever</loc>  <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://emcokids.co.kr/blog/flu-rapid-test</loc>      <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://emcokids.co.kr/blog/well-child-checkup</loc>  <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://emcokids.co.kr/blog/growth-curve-tips</loc>   <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://emcokids.co.kr/blog/burn-degree-guide</loc>   <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://emcokids.co.kr/blog/cold-flu-symptoms</loc>   <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>
