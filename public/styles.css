@@ -715,6 +715,7 @@ h1, h2, h3, h4 {
   gap: 24px;
 }
 .post-card {
+  display: block;
   background: #fff;
   border-radius: var(--radius-lg);
   padding: 28px;
@@ -722,6 +723,8 @@ h1, h2, h3, h4 {
   position: relative;
   transition: transform 0.25s, box-shadow 0.25s;
   cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
 .post-card:hover {
   transform: rotate(-1deg) translateY(-4px);
@@ -949,6 +952,7 @@ h1, h2, h3, h4 {
   font-size: 14px;
   color: #fff;
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+  pointer-events: none; /* 이모지가 X 버튼 클릭 가로채지 않도록 명시 */
 }
 .deco-cloud-1 { top: 8px; right: 84px; font-size: 18px; opacity: 0.7; }
 .deco-cloud-2 { bottom: 6px; left: 110px; font-size: 14px; opacity: 0.5; }
@@ -1019,18 +1023,24 @@ h1, h2, h3, h4 {
 }
 @keyframes pulse-dot { 50% { box-shadow: 0 0 0 5px rgba(91,184,147,0.2); } }
 .chat-close {
-  position: relative;
-  z-index: 1;
-  width: 36px; height: 36px;
+  position: absolute;          /* 헤더 layout 변화에 영향 안 받도록 */
+  top: 14px;
+  right: 14px;
+  z-index: 1000;               /* 무조건 가장 위 */
+  width: 38px; height: 38px;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.30);
   color: #fff;
-  border: 1.5px solid rgba(255,255,255,0.4);
-  transition: all 0.15s;
+  border: 1.5px solid rgba(255,255,255,0.5);
+  transition: background 0.15s, transform 0.15s;
   flex-shrink: 0;
+  cursor: pointer;
+  pointer-events: auto;
 }
-.chat-close:hover { background: rgba(255,255,255,0.5); transform: rotate(90deg); }
+.chat-close > * { pointer-events: none; }
+.chat-close:hover { background: rgba(255,255,255,0.55); transform: rotate(90deg); }
+.chat-header { padding-right: 64px; } /* X 자리 확보 */
 
 /* Quick action bar */
 .chat-quick-bar {

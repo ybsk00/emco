@@ -52,12 +52,16 @@
   mobileMenu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setMobileMenu(false)));
 
   // ============ 챗봇 모달 열기/닫기 ============
+  // hidden attribute + inline style.display 를 항상 함께 명시한다.
+  // (이전 버전의 inline display:none 이 stuck 되어 다시 안 열리는 케이스 방지)
   function setChatOpen(open) {
     chatOpen = open;
-    widget.hidden = !open;
-    backdrop.hidden = !open;
-    document.body.style.overflow = open ? "hidden" : "";
     if (open) {
+      widget.hidden = false;
+      widget.style.display = "flex";
+      backdrop.hidden = false;
+      backdrop.style.display = "block";
+      document.body.style.overflow = "hidden";
       fab.classList.add("open");
       fabIcon.firstElementChild.setAttribute("href", "#i-close");
       fabIcon.setAttribute("width", "22");
@@ -65,6 +69,11 @@
       fabPulse.style.display = "none";
       setTimeout(() => chatInput.focus(), 80);
     } else {
+      widget.hidden = true;
+      widget.style.display = "none";
+      backdrop.hidden = true;
+      backdrop.style.display = "none";
+      document.body.style.overflow = "";
       fab.classList.remove("open");
       fabIcon.firstElementChild.setAttribute("href", "#mascot-face");
       fabIcon.setAttribute("width", "42");
@@ -77,7 +86,16 @@
     if (e.key === "Escape" && chatOpen) setChatOpen(false);
   });
 
-  // 닫기 버튼은 위임 외에 직접 리스너로 한 번 더 보장 (SVG <use> closest() edge case 회피)
+  // inline onclick 에서 호출 — JS state 변경도 같이 정리되도록 setChatOpen 경유
+  window.emcoChat = {
+    open: function () { setChatOpen(true); },
+    close: function () { setChatOpen(false); },
+    toggle: function () { setChatOpen(!chatOpen); },
+  };
+  // 하위호환 (이전 inline onclick 잔존 캐시 대응)
+  window.emcoCloseChat = function () { setChatOpen(false); };
+
+  // 닫기 버튼은 위임 외에 직접 리스너로도 한 번 더 보장
   document.querySelectorAll('[data-action="close-chat"]').forEach((el) => {
     el.addEventListener("click", (e) => {
       e.preventDefault();
@@ -85,6 +103,9 @@
       setChatOpen(false);
     });
   });
+
+  // 페이지 로드 시 명시 초기화 — 캐시된 옛 inline style 이 stuck 되지 않도록
+  setChatOpen(false);
 
   // ============ 세션 저장 / 복원 ============
   function restoreSession() {
