@@ -38,3 +38,4 @@ ui-debug.log
 .cache/
 .DS_Store
 coverage/
+.claude/

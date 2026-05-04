@@ -6,9 +6,11 @@
   "scripts": {
     "seed:hospital-faq": "tsx seed-hospital-faq.ts",
     "seed:pubmed": "tsx seed-pubmed.ts",
+    "seed:pubmed:extra": "tsx seed-pubmed.ts --batch extra",
     "seed:pubmed:vaccine": "tsx seed-pubmed.ts --topic vaccine",
     "seed:pubmed:cold": "tsx seed-pubmed.ts --topic cold",
-    "seed:pubmed:dryrun": "tsx seed-pubmed.ts --max 5"
+    "seed:pubmed:dryrun": "tsx seed-pubmed.ts --max 5",
+    "seed:pubmed:extra:dryrun": "tsx seed-pubmed.ts --batch extra --max 3"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
