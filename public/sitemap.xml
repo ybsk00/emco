@@ -43,4 +43,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+
+  <!-- 블로그 글 6개 (emco.lumiaeo.com 원문으로 301 redirect) -->
+  <url><loc>https://emcokids.co.kr/blog/burn-first-aid</loc>      <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://emcokids.co.kr/blog/burn-home-prevention</loc><lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://emcokids.co.kr/blog/clinic-vs-er</loc>        <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://emcokids.co.kr/blog/well-child-checkup</loc>  <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://emcokids.co.kr/blog/growth-curve-tips</loc>   <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://emcokids.co.kr/blog/burn-degree-guide</loc>   <lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

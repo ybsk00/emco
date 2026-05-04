@@ -4,6 +4,15 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": false,
     "trailingSlash": false,
+    "redirects": [
+      { "source": "/blog/burn-first-aid",       "destination": "https://emco.lumiaeo.com/blog/sangbong-peds-burn-acute-first-aid-amco",       "type": 301 },
+      { "source": "/blog/burn-home-prevention", "destination": "https://emco.lumiaeo.com/blog/sangbong-peds-burn-acute-home-prevention-amco", "type": 301 },
+      { "source": "/blog/clinic-vs-er",         "destination": "https://emco.lumiaeo.com/blog/sangbong-peds-burn-acute-vs-er-amco",           "type": 301 },
+      { "source": "/blog/well-child-checkup",   "destination": "https://emco.lumiaeo.com/blog/sangbong-peds-well-child-exam-compare-friendly-amco", "type": 301 },
+      { "source": "/blog/growth-curve-tips",    "destination": "https://emco.lumiaeo.com/blog/sangbong-peds-well-child-exam-growth-curve-tips-amco", "type": 301 },
+      { "source": "/blog/burn-degree-guide",    "destination": "https://emco.lumiaeo.com/blog/sangbong-peds-burn-acute-burn-symptoms-amco",    "type": 301 },
+      { "source": "/blog",                      "destination": "https://emco.lumiaeo.com/blog",                                                "type": 301 }
+    ],
     "rewrites": [
       {
         "source": "/api/**",
