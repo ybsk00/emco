@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- 코코 마스코트 — favicon 단순화 버전 -->
+  <rect width="100" height="100" rx="22" fill="#FFE5D1"/>
+  <ellipse cx="28" cy="32" rx="13" ry="14" fill="#FFB088" stroke="#4A3F35" stroke-width="3"/>
+  <ellipse cx="72" cy="32" rx="13" ry="14" fill="#FFB088" stroke="#4A3F35" stroke-width="3"/>
+  <ellipse cx="50" cy="60" rx="40" ry="36" fill="#FFB088" stroke="#4A3F35" stroke-width="3.5"/>
+  <ellipse cx="50" cy="72" rx="22" ry="16" fill="#FFE5D1"/>
+  <ellipse cx="38" cy="55" rx="3.4" ry="4.6" fill="#4A3F35"/>
+  <ellipse cx="62" cy="55" rx="3.4" ry="4.6" fill="#4A3F35"/>
+  <circle cx="39" cy="53" r="1.2" fill="#fff"/>
+  <circle cx="63" cy="53" r="1.2" fill="#fff"/>
+  <ellipse cx="50" cy="66" rx="4" ry="3" fill="#4A3F35"/>
+  <path d="M50 70 Q50 76 44 78 M50 70 Q50 76 56 78" stroke="#4A3F35" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>
