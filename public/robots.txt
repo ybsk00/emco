@@ -1,0 +1,27 @@
+# 엠코소아청소년과의원 — 모든 검색엔진 봇 색인 허용
+User-agent: *
+Allow: /
+
+# 챗봇 API 는 인덱싱 의미 없음
+Disallow: /api/
+
+# 사이트맵
+Sitemap: https://emcokids.co.kr/sitemap.xml
+
+# 네이버 검색 봇은 별도 명시
+User-agent: Yeti
+Allow: /
+Disallow: /api/
+
+# 다음 검색 봇
+User-agent: Daum
+Allow: /
+Disallow: /api/
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
