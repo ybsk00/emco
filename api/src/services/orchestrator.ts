@@ -1,4 +1,4 @@
-// 엠코소아과 챗봇 오케스트레이터
+﻿// 엠코소아과 챗봇 오케스트레이터
 // 4 에이전트: greeting · general · consultation · medical
 // 안전 가드 → Intent 라우팅 → 에이전트 디스패치 → __SOURCES__ 마커 출력
 

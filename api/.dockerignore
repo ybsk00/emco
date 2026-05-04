@@ -1,5 +1,5 @@
 node_modules
-dist
+# dist 는 Dockerfile 의 COPY 대상이라 제외 금지
 .env
 .env.*
 *.log

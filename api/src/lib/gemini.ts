@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
+﻿import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
 import { env } from '../config/env.js';
 
 const ai = new GoogleGenerativeAI(env.GEMINI_API_KEY);

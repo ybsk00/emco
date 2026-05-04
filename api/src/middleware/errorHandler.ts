@@ -1,4 +1,4 @@
-import type { ErrorRequestHandler, Request, Response, NextFunction, RequestHandler } from 'express';
+﻿import type { ErrorRequestHandler, Request, Response, NextFunction, RequestHandler } from 'express';
 
 export class AppError extends Error {
   constructor(public status: number, public code: string, message: string) {

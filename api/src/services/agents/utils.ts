@@ -1,4 +1,4 @@
-import type { ChatTurn, SearchResult } from '../../types/chatbot.js';
+﻿import type { ChatTurn, SearchResult } from '../../types/chatbot.js';
 
 // 마크다운 제거 — 동네 소아과 톤에 맞춰 평문으로 응답
 export function stripMarkdown(text: string): string {

@@ -1,4 +1,4 @@
-import rateLimit from 'express-rate-limit';
+﻿import rateLimit from 'express-rate-limit';
 
 // 챗봇 무거운 요청 (LLM 호출) — IP당 1분에 30회
 export const aiHeavyLimiter = rateLimit({

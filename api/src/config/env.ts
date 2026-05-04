@@ -1,4 +1,4 @@
-import { z } from 'zod';
+﻿import { z } from 'zod';
 
 const schema = z.object({
   PORT: z.coerce.number().int().positive().default(8080),
@@ -8,7 +8,7 @@ const schema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(20),
 
   GEMINI_API_KEY: z.string().min(10),
-  GEMINI_MODEL: z.string().default('gemini-2.0-flash'),
+  GEMINI_MODEL: z.string().default('gemini-2.5-flash'),
   GEMINI_EMBEDDING_MODEL: z.string().default('gemini-embedding-001'),
 
   CORS_ORIGIN: z.string().default(''),

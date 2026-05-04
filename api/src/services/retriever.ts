@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase.js';
+﻿import { supabase } from '../lib/supabase.js';
 import { embedQuery } from '../lib/embedding.js';
 import type { Category, SearchResult } from '../types/chatbot.js';
 

@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+﻿import { createClient } from '@supabase/supabase-js';
 import { env } from '../config/env.js';
 
 // 서비스 롤 클라이언트 — RLS 우회. 백엔드 전용.

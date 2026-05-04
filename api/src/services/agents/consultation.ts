@@ -1,4 +1,4 @@
-import { getModel } from '../../lib/gemini.js';
+﻿import { getModel } from '../../lib/gemini.js';
 import { CONSULTATION_PROMPT } from './prompts.js';
 import { formatHistory, formatRagContext } from './utils.js';
 import type { ChatTurn, SearchResult } from '../../types/chatbot.js';

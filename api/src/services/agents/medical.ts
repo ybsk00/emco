@@ -1,4 +1,4 @@
-import { getModel } from '../../lib/gemini.js';
+﻿import { getModel } from '../../lib/gemini.js';
 import { MEDICAL_CATEGORY_PROMPT, MEDICAL_RAG_PROMPT, MEDICAL_FALLBACK_PROMPT } from './prompts.js';
 import { formatHistory, formatRagContext } from './utils.js';
 import type { Category, ChatTurn, SearchResult } from '../../types/chatbot.js';

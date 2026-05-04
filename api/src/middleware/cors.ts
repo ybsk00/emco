@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from 'express';
+﻿import type { Request, Response, NextFunction } from 'express';
 import { env } from '../config/env.js';
 
 // 챗봇 전용 CORS — 화이트리스트 + iframe(Origin 없음) 허용

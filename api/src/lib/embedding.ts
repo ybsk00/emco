@@ -1,4 +1,4 @@
-import { env } from '../config/env.js';
+﻿import { env } from '../config/env.js';
 
 // emco_faq.embedding 컬럼이 vector(768) — Matryoshka 절단으로 768 강제
 const EMBED_DIM = 768;
