@@ -12,9 +12,9 @@
 | 프론트 | Firebase Hosting (정적 HTML/CSS/JS, `public/`) |
 | 백엔드 | Google Cloud Run, Express + TypeScript (`api/`) |
 | DB | Supabase pgvector (프로젝트 ref `wltqkxesvtfwotcngzjj`, Tokyo) |
-| LLM | Gemini 2.5 Flash (thinking OFF) |
+| LLM | Gemini 2.5 Flash (thinking OFF, maxOutputTokens 4096) |
 | 임베딩 | gemini-embedding-001 (Matryoshka 768d) |
-| 도메인 | emcokids.co.kr (가비아) → Firebase Custom Domain |
+| 도메인 | emcokids.co.kr (가비아 → Firebase Custom Domain) |
 
 ## GCP / Firebase
 
@@ -31,9 +31,11 @@ emco/
 ├── public/                    Firebase Hosting (정적)
 │   ├── index.html             홈페이지 + 챗봇 모달 + JSON-LD
 │   ├── styles.css
-│   ├── app.js                 챗봇 vanilla JS (window.emcoChat 글로벌 API)
+│   ├── app.js                 챗봇 vanilla JS (window.emcoChat 글로벌)
 │   ├── sitemap.xml / feed.xml / robots.txt
-│   ├── og-image.png + favicon.svg + manifest
+│   ├── og-image.{svg,png} + favicon.svg + favicon-{16,32,48}.png
+│   ├── apple-touch-icon.png + android-chrome-{192,512}.png
+│   ├── manifest.webmanifest
 │   └── googlec189...html      Google verification
 ├── api/                       Cloud Run 백엔드
 │   ├── src/
@@ -57,6 +59,21 @@ emco/
 └── firebase.json + .firebaserc
 ```
 
+## 운영 정책 (도메인 사실들)
+
+| 항목 | 값 |
+|---|---|
+| 진료시간 (월·화·목·금) | **10:00 ~ 20:00** (평일 야간) |
+| 토·일·공휴일 | 10:00 ~ 18:00 |
+| **수요일** | **정기휴무** ("휴진"이 아닌 "정기휴무") |
+| 점심시간 | 13:00 ~ 14:00 휴진 |
+| 전화 | 02-433-5275 |
+| 위치 | 서울 중랑구 망우로 353 현대프리미어스엠코 C동 308호 (상봉동) |
+| 원장 | 유신 **원장님** (존칭 통일) |
+| **화상** | **직접 진료 안 함** — 화상 전문병원(베스티안·한림대 한강성심·한일병원) 안내 |
+
+진료 항목 6개: 감기·독감 신속검사 · 예방접종 · 영유아 검진 · 키 성장 평가 · **아토피·알레르기 진료** · 청소년 검진
+
 ## 챗봇 아키텍처
 
 4-에이전트 멀티 에이전트 (서울온케어 패턴 차용 + 단순화):
@@ -66,7 +83,7 @@ emco/
 | greeting | 0회 | ✗ | 인사·작별 (하드코딩) |
 | general | 1회 stream | ✗ | 잡담 |
 | consultation | 1회 stream | ✓ | 진료시간·위치·비용·주차 |
-| medical | 1~2회 stream | ✓ | 예방접종·검진·증상·응급·키 성장 |
+| medical | 1~2회 stream | ✓ | 예방접종·검진·증상·키 성장 등 |
 
 **Intent 라우팅** (`api/src/services/agents/intentRouter.ts`):
 1. 키워드 prefilter (greeting → consultation → medical)
@@ -76,6 +93,8 @@ emco/
 **스트리밍 프로토콜**: `text/plain` 응답 끝에 `\n__SOURCES__[JSON]` 마커. 프론트가 마커 이전만 화면에 표시, 마커 이후를 source chip으로 렌더.
 
 **카테고리** (medical만): general / vaccine / checkup / cold / emergency / growth / teen
+
+**화상 정책**: SYSTEM_TONE 에 명시. 챗봇이 화상 질문에 응급 처치 후 전문병원 안내.
 
 ## DB 스키마 (Supabase public)
 
@@ -94,11 +113,11 @@ emco/
 # 백엔드 로컬 개발
 cd api; npm run dev
 
-# 백엔드 배포
+# 백엔드 배포 (Dockerfile 이 npm run build 안 함 — 로컬 빌드 dist 그대로 deploy)
 cd api; npm run build; gcloud builds submit --config cloudbuild.yaml .
 
 # 환경변수만 빠르게 변경
-gcloud run services update emco-chatbot-api --region=asia-northeast3 --update-env-vars="KEY=value"
+gcloud run services update emco-chatbot-api --region=asia-northeast3 --update-env-vars="K=V"
 
 # 프론트 배포
 firebase deploy --only hosting
@@ -106,9 +125,9 @@ firebase deploy --only hosting
 # Cloud Run 로그
 gcloud run services logs read emco-chatbot-api --region=asia-northeast3 --limit=30
 
-# PubMed 시딩
-cd scripts; npm run seed:pubmed              # 코어 (5,000+)
-cd scripts; npm run seed:pubmed:extra        # 가정응급/red flags/lab/비만 (2,000+)
+# 시드 (텍스트 변경 후 DB 재시딩 패턴: row DELETE → seed:hospital-faq 재실행)
+cd scripts; npm run seed:hospital-faq
+cd scripts; npm run seed:pubmed:extra
 
 # OG 이미지/favicon 재생성 (SVG 수정 후)
 cd scripts; node gen-assets.mjs
@@ -116,8 +135,8 @@ cd scripts; node gen-assets.mjs
 
 ## 검색엔진 등록 상태 (2026-05-04)
 
-- ✅ Google Search Console: HTML 파일 인증 완료
-- ✅ Naver Search Advisor: meta 태그 인증 완료, sitemap + RSS 제출
+- ✅ **Google Search Console**: HTML 파일 인증 (`/googlec189ed635fa1310c.html`) + sitemap 제출
+- ✅ **Naver Search Advisor**: meta 태그 인증 (`naver-site-verification`) + sitemap + RSS 제출
 - ⏸ Bing Webmaster: 미등록 (Google Search Console import 가능)
 
 ## 시크릿 정책 (절대 위반 금지)
@@ -136,7 +155,8 @@ cd scripts; node gen-assets.mjs
   ```powershell
   [System.IO.File]::WriteAllText($tmp, $body, [System.Text.UTF8Encoding]::new($false))
   ```
-- 핵심: **브라우저 fetch는 항상 UTF-8** — 운영에서는 문제 없음. 디버깅 도구만의 함정.
+- **브라우저 fetch는 항상 UTF-8** — 운영에서는 문제 없음. 디버깅 도구만의 함정.
+- 디버깅 시 코드 의심 전에 도구 인코딩 먼저 의심.
 
 ### 2. Cloud Build TS 컴파일에서 한국어 정규식이 깨질 수 있음
 - 증상: `dist/*.js`의 정규식 안 한국어가 잘못된 byte sequence로 컴파일
@@ -154,17 +174,34 @@ cd scripts; node gen-assets.mjs
 ### 5. Gemini 2.5 Flash thinking mode 기본 ON
 - 증상: 응답이 중간에 잘림 (thinking에 토큰 소진)
 - 해결: `generationConfig: { thinkingConfig: { thinkingBudget: 0 } }`
-- `lib/gemini.ts`의 `getModel()`에서 처리됨
+- `lib/gemini.ts`의 `getModel()`에서 처리됨. maxOutputTokens 4096 default.
 
 ### 6. Firebase Hosting `cleanUrls`가 .html redirect → Google verification 실패
-- 해결: `cleanUrls: false`. 단일 페이지라 SEO 영향 없음
+- 해결: `cleanUrls: false`. 단일 페이지라 SEO 영향 없음.
 
-### 7. 네이버 RSS는 동일 도메인 URL만 인정
+### 7. Firebase Hosting rewrite `**` 패턴이 정적 자산 가로챔
+- 증상: `/sitemap.xml`, `/foo.html` 같은 정적 파일 요청에 `index.html`이 응답
+- 원인: 옛 Firebase 동작 또는 deploy 시점 캐시 — `**` 패턴이 정적보다 우선될 수 있음
+- 해결: `firebase.json` rewrites source 를 `/`만 명시. 다른 경로는 정적 파일로 직접 매칭됨.
+- 이게 단일 페이지 사이트의 sitemap/feed/verification 파일 라우팅을 보장.
+
+### 8. 네이버 RSS는 동일 도메인 URL만 인정
 - 증상: `<item><link>https://emco.lumiaeo.com/...</link>`을 거부 ("형식이 올바르지 않음")
-- 해결: link를 `https://emcokids.co.kr/blog/{slug}`로, firebase.json `redirects`로 emco.lumiaeo.com 원문에 301 redirect
+- 해결: link를 `https://emcokids.co.kr/blog/{slug}`로, firebase.json `redirects`로 외부 원문에 301 redirect
 
-### 8. Gemini 임베딩 모델
+### 9. Gemini 임베딩 모델
 - `text-embedding-004`는 신규 키에 deprecated. **`gemini-embedding-001`** 사용 + outputDimensionality=768 (Matryoshka 절단). REST API 직접 호출 (SDK는 outputDimensionality 옵션 없음).
+
+### 10. 모달 토글 — single source of truth
+- 옛 inline `style.display='none'`이 stuck 되어 다시 안 열리는 버그가 있었음
+- 패턴: `setChatOpen(open)` 함수 단일 진입점. 안에서 `hidden` + `style.display` **둘 다** 명시.
+- 모든 진입점(FAB/X/배경/ESC/위임 핸들러/inline onclick)은 `setChatOpen()` 또는 `window.emcoChat.{open,close,toggle}()` 경유.
+- 페이지 로드 시 `setChatOpen(false)` 명시 호출로 캐시된 옛 inline style 초기화.
+
+### 11. Firebase Hosting cache-control
+- 옛 설정: `*.@(js|css)` immutable max-age 31536000 — 변경 사항 사용자 브라우저에 안 들어감
+- 현 설정: `*.@(js|css|html)` max-age=0, must-revalidate — 매 요청 ETag 검증, 변경 즉시 반영
+- 이미지(png/svg/woff2)만 max-age=86400
 
 ## 도메인 / DNS
 
@@ -176,6 +213,12 @@ cd scripts; node gen-assets.mjs
 | www | 199.36.158.100 |
 
 Firebase에 `www.emcokids.co.kr`은 apex로 영구 redirect 등록.
+
+## 카카오톡/페이스북 OG 캐시 갱신
+
+OG 이미지나 description 변경 후 카톡 미리보기는 자동 갱신 안 됨:
+- 카카오: https://developers.kakao.com/tool/clear/og → URL 입력 → 삭제
+- 페이스북: https://developers.facebook.com/tools/debug/ → 다시 스크랩
 
 ## 다음에 할 만한 것
 
