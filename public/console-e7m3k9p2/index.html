@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>엠코 어드민</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="adm-header">
+    <h1>엠코 어드민</h1>
+    <div class="adm-header-right">
+      <span id="last-updated" class="adm-muted">—</span>
+      <button id="refresh-btn" class="adm-btn">새로고침</button>
+    </div>
+  </header>
+
+  <main class="adm-main">
+    <section class="adm-section">
+      <h2>방문자</h2>
+      <div class="adm-card-row" id="visitor-cards">
+        <div class="adm-card" data-key="today"><div class="adm-card-label">오늘</div><div class="adm-card-value">—</div><div class="adm-card-sub"></div></div>
+        <div class="adm-card" data-key="yesterday"><div class="adm-card-label">어제</div><div class="adm-card-value">—</div><div class="adm-card-sub"></div></div>
+        <div class="adm-card" data-key="this_week"><div class="adm-card-label">이번 주</div><div class="adm-card-value">—</div><div class="adm-card-sub"></div></div>
+        <div class="adm-card" data-key="this_month"><div class="adm-card-label">이번 달</div><div class="adm-card-value">—</div><div class="adm-card-sub"></div></div>
+      </div>
+      <div class="adm-chart-wrap">
+        <div class="adm-chart-title">최근 30일 일별 방문자 (유니크)</div>
+        <svg id="daily-chart" viewBox="0 0 800 200" preserveAspectRatio="none" role="img" aria-label="30일 방문자 차트"></svg>
+      </div>
+    </section>
+
+    <section class="adm-section">
+      <h2>챗봇</h2>
+      <div class="adm-card-row" id="chat-cards">
+        <div class="adm-card"><div class="adm-card-label">오늘 세션</div><div class="adm-card-value" data-key="sessions_today">—</div></div>
+        <div class="adm-card"><div class="adm-card-label">주간 세션</div><div class="adm-card-value" data-key="sessions_week">—</div></div>
+        <div class="adm-card"><div class="adm-card-label">평균 응답시간</div><div class="adm-card-value" data-key="avg_response_ms">—</div></div>
+        <div class="adm-card"><div class="adm-card-label">Fallback 비율</div><div class="adm-card-value" data-key="fallback_rate">—</div></div>
+      </div>
+      <div class="adm-chart-wrap">
+        <div class="adm-chart-title">카테고리 분포 (주간)</div>
+        <div id="category-bars" class="adm-bars"></div>
+      </div>
+    </section>
+
+    <section class="adm-section">
+      <h2>최근 챗봇 세션</h2>
+      <div class="adm-table-wrap">
+        <table class="adm-table" id="sessions-table">
+          <thead>
+            <tr><th>시각</th><th>메시지 수</th><th>IP</th><th>첫 질문</th></tr>
+          </thead>
+          <tbody id="sessions-tbody"></tbody>
+        </table>
+        <button id="load-more-btn" class="adm-btn adm-btn-secondary" hidden>더 보기</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="session-modal" class="adm-modal" hidden>
+    <div class="adm-modal-backdrop" data-close></div>
+    <div class="adm-modal-panel">
+      <header class="adm-modal-header">
+        <h3 id="modal-title">세션</h3>
+        <button class="adm-btn" data-close>닫기</button>
+      </header>
+      <div id="modal-meta" class="adm-modal-meta"></div>
+      <div id="modal-messages" class="adm-modal-messages"></div>
+    </div>
+  </div>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
