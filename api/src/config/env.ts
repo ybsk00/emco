@@ -13,6 +13,9 @@ const schema = z.object({
 
   CORS_ORIGIN: z.string().default(''),
   IP_HASH_SALT: z.string().min(16).default('emco-default-salt-change-me'),
+
+  ADMIN_USERNAME: z.string().min(1).optional(),
+  ADMIN_PASSWORD: z.string().min(1).optional(),
 });
 
 const parsed = schema.safeParse(process.env);
