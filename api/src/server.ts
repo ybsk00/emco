@@ -1,7 +1,11 @@
-﻿import express from 'express';
+﻿import './setup.js';
+
+import express from 'express';
 import { env } from './config/env.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import patientChatbotRouter from './routes/patientChatbot.js';
+import trackRouter from './routes/track.js';
+import adminRouter from './routes/admin.js';
 
 const app = express();
 
@@ -16,6 +20,8 @@ app.get('/health', (_req, res) => {
 
 // API 라우트 — /api 프리픽스로 마운트 (Firebase Hosting rewrite 와 일치)
 app.use('/api/patient-chatbot', patientChatbotRouter);
+app.use('/api/track', trackRouter);
+app.use('/api/admin', adminRouter);
 
 // 에러 핸들러는 가장 마지막
 app.use(errorHandler);
