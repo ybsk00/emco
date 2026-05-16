@@ -93,24 +93,135 @@
     });
   }
 
+  function renderChat(c) {
+    if (!c) c = {};
+    document.querySelectorAll('#chat-cards .adm-card-value').forEach((el) => {
+      const key = el.dataset.key;
+      if (key === 'avg_response_ms') {
+        el.textContent = fmtMs(c.avg_response_ms);
+      } else if (key === 'fallback_rate') {
+        el.textContent = fmtPct(c.fallback_rate);
+      } else {
+        el.textContent = fmtInt(c[key]);
+      }
+    });
+
+    const bars = document.getElementById('category-bars');
+    bars.innerHTML = '';
+    const cats = Array.isArray(c.category_distribution) ? c.category_distribution : [];
+    const maxC = Math.max(1, ...cats.map((x) => x.count || 0));
+    if (cats.length === 0) {
+      bars.innerHTML = '<div class="adm-muted">데이터 없음</div>';
+      return;
+    }
+    cats.forEach((x) => {
+      const row = document.createElement('div');
+      row.className = 'adm-bar-row';
+      row.innerHTML = `
+        <div>${x.category}</div>
+        <div class="adm-bar-track"><div class="adm-bar-fill" style="width: ${((x.count || 0) / maxC * 100).toFixed(1)}%"></div></div>
+        <div class="adm-bar-count">${fmtInt(x.count || 0)}</div>
+      `;
+      bars.appendChild(row);
+    });
+  }
+
   function renderLastUpdated() {
     const el = document.getElementById('last-updated');
     if (el) el.textContent = '갱신: ' + fmtTime(new Date().toISOString());
   }
 
-  // 이후 Task 13에서 chat/sessions 추가
   async function loadStats() {
     try {
       const data = await fetchJson('/api/admin/stats');
       renderVisitors(data && data.visitors);
+      renderChat(data && data.chat);
       renderLastUpdated();
-      // chat 섹션은 Task 13에서 채움
       window.__adminStats = data;
     } catch (e) {
       console.error('[admin] stats load failed:', e);
     }
   }
 
+  let sessionsCursor = null;
+
+  function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  function appendSessionRows(items) {
+    const tbody = document.getElementById('sessions-tbody');
+    items.forEach((s) => {
+      const tr = document.createElement('tr');
+      tr.dataset.id = s.id;
+      tr.innerHTML = `
+        <td>${escapeHtml(fmtTime(s.created_at))}</td>
+        <td>${fmtInt(s.message_count)}</td>
+        <td>${escapeHtml(s.ip_hash_short || '—')}</td>
+        <td class="adm-q">${escapeHtml(s.first_user_query || '—')}</td>
+      `;
+      tr.addEventListener('click', () => openSessionModal(s.id));
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function loadSessions(initial) {
+    try {
+      const url = '/api/admin/sessions?limit=50' + (sessionsCursor && !initial ? '&before=' + encodeURIComponent(sessionsCursor) : '');
+      const data = await fetchJson(url);
+      if (initial) document.getElementById('sessions-tbody').innerHTML = '';
+      appendSessionRows(data.sessions || []);
+      sessionsCursor = data.next_before;
+      const btn = document.getElementById('load-more-btn');
+      btn.hidden = !sessionsCursor;
+    } catch (e) {
+      console.error('[admin] sessions load failed:', e);
+    }
+  }
+
+  async function openSessionModal(id) {
+    try {
+      const data = await fetchJson('/api/admin/sessions/' + encodeURIComponent(id));
+      document.getElementById('modal-title').textContent = '세션 ' + id.slice(0, 8);
+      const meta = document.getElementById('modal-meta');
+      meta.innerHTML = `
+        <div>시작: ${escapeHtml(fmtTime(data.session.created_at))}</div>
+        <div>마지막: ${escapeHtml(fmtTime(data.session.last_seen_at))}</div>
+        <div>IP: ${escapeHtml(data.session.ip_hash_short || '—')}</div>
+        <div>UA: ${escapeHtml((data.session.user_agent || '').slice(0, 80))}</div>
+      `;
+      const wrap = document.getElementById('modal-messages');
+      wrap.innerHTML = '';
+      (data.messages || []).forEach((m) => {
+        const div = document.createElement('div');
+        div.className = 'adm-msg ' + (m.role === 'user' ? 'user' : 'assistant');
+        div.innerHTML = `
+          ${escapeHtml(m.content || '')}
+          <div class="adm-msg-meta">${escapeHtml(fmtTime(m.created_at))}${m.category ? ' · ' + escapeHtml(m.category) : ''}</div>
+        `;
+        wrap.appendChild(div);
+      });
+      document.getElementById('session-modal').hidden = false;
+    } catch (e) {
+      console.error('[admin] session detail failed:', e);
+    }
+  }
+
+  document.querySelectorAll('#session-modal [data-close]').forEach((el) => {
+    el.addEventListener('click', () => { document.getElementById('session-modal').hidden = true; });
+  });
+
+  document.getElementById('load-more-btn').addEventListener('click', () => loadSessions(false));
+
+  // refresh-btn 핸들러 — stats + sessions 둘 다 리로드
   document.getElementById('refresh-btn').addEventListener('click', loadStats);
+  document.getElementById('refresh-btn').addEventListener('click', () => {
+    sessionsCursor = null;
+    loadSessions(true);
+  });
+
+  // 초기 로드
   loadStats();
+  loadSessions(true);
 })();
