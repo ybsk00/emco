@@ -336,6 +336,20 @@
  ]
 }
 </script>
+
+<!-- 방문자 추적 비콘 — /console-* 경로는 서버에서 무시됨 -->
+<script>
+  (function () {
+    try {
+      var body = JSON.stringify({
+        path: location.pathname,
+        ref: document.referrer || null,
+      });
+      var blob = new Blob([body], { type: 'application/json' });
+      navigator.sendBeacon('/api/track', blob);
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 
