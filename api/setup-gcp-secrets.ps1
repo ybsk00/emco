@@ -5,6 +5,8 @@
     - emco-supabase-key  ← SUPABASE_SERVICE_ROLE_KEY
     - emco-gemini-key    ← GEMINI_API_KEY
     - emco-ip-salt       ← IP_HASH_SALT
+    - emco-admin-user    ← ADMIN_USERNAME
+    - emco-admin-pass    ← ADMIN_PASSWORD
 #>
 param(
   [string]$Project = "",
@@ -32,6 +34,8 @@ $secretMap = @(
   [PSCustomObject]@{ Name = "emco-supabase-key"; Key = "SUPABASE_SERVICE_ROLE_KEY" }
   [PSCustomObject]@{ Name = "emco-gemini-key";   Key = "GEMINI_API_KEY" }
   [PSCustomObject]@{ Name = "emco-ip-salt";      Key = "IP_HASH_SALT" }
+  [PSCustomObject]@{ Name = "emco-admin-user";   Key = "ADMIN_USERNAME" }
+  [PSCustomObject]@{ Name = "emco-admin-pass";   Key = "ADMIN_PASSWORD" }
 )
 
 $projectArgs = @()
