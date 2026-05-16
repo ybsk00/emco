@@ -32,6 +32,13 @@
     ],
     "headers": [
       {
+        "source": "/console-**",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+          { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, private" }
+        ]
+      },
+      {
         "source": "**/*.@(png|jpg|webp|woff2|svg)",
         "headers": [
           { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }

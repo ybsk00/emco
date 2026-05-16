@@ -5,6 +5,9 @@ Allow: /
 # 챗봇 API 는 인덱싱 의미 없음
 Disallow: /api/
 
+# 어드민 콘솔은 비공개
+Disallow: /console-
+
 # 사이트맵
 Sitemap: https://emcokids.co.kr/sitemap.xml
 
@@ -12,16 +15,20 @@ Sitemap: https://emcokids.co.kr/sitemap.xml
 User-agent: Yeti
 Allow: /
 Disallow: /api/
+Disallow: /console-
 
 # 다음 검색 봇
 User-agent: Daum
 Allow: /
 Disallow: /api/
+Disallow: /console-
 
 # Google
 User-agent: Googlebot
 Allow: /
+Disallow: /console-
 
 # Bing
 User-agent: Bingbot
 Allow: /
+Disallow: /console-
