@@ -102,4 +102,41 @@ router.get(
   }),
 );
 
+// GET /api/admin/sessions/:id
+router.get(
+  '/sessions/:id',
+  asyncHandler(async (req: Request, res: Response) => {
+    const id = z.string().uuid().parse(req.params.id);
+
+    const { data: session, error: sErr } = await supabase
+      .from('emco_chat_sessions')
+      .select('id, ip_hash, user_agent, created_at, last_seen_at')
+      .eq('id', id)
+      .single();
+    if (sErr || !session) {
+      throw new AppError(404, 'SESSION_NOT_FOUND', '세션을 찾을 수 없습니다.');
+    }
+
+    const { data: messages, error: mErr } = await supabase
+      .from('emco_chat_messages')
+      .select('role, content, category, metadata, created_at')
+      .eq('session_id', id)
+      .order('created_at', { ascending: true });
+    if (mErr) {
+      throw new AppError(500, 'MESSAGES_FAILED', '메시지 조회 실패');
+    }
+
+    res.json({
+      session: {
+        id: session.id,
+        ip_hash_short: (session.ip_hash ?? '').slice(0, 4),
+        user_agent: session.user_agent,
+        created_at: session.created_at,
+        last_seen_at: session.last_seen_at,
+      },
+      messages: messages ?? [],
+    });
+  }),
+);
+
 export default router;
