@@ -220,9 +220,19 @@ OG 이미지나 description 변경 후 카톡 미리보기는 자동 갱신 안 
 - 카카오: https://developers.kakao.com/tool/clear/og → URL 입력 → 삭제
 - 페이스북: https://developers.facebook.com/tools/debug/ → 다시 스크랩
 
-## 다음에 할 만한 것
+## 어드민 콘솔
 
-- 어드민 페이지 (대화 모니터링·FAQ 추가/편집)
+- 경로: `https://emcokids.co.kr/console-e7m3k9p2/` (외부 노출 금지, sitemap/robots 차단)
+- 인증: HTTP Basic Auth — `emcoadmin` / `admin1234` (약한 비밀번호 → 추후 강한 값으로 교체 권장)
+- 시크릿: GCP Secret Manager `emco-admin-user`, `emco-admin-pass` → Cloud Run env `ADMIN_USERNAME`, `ADMIN_PASSWORD`
+- 데이터: `emco_page_views` (방문자 비콘) + 기존 `emco_chat_*` (챗봇 로그)
+- 집계 RPC: `emco_admin_stats()` — KST 일자 경계, 단일 호출로 모든 지표 반환
+- 방문자 비콘은 `<head>` 끝에서 `sendBeacon('/api/track')` 호출 — `/console-*` 경로는 서버에서 카운트 제외
+- 비밀번호 회전 시: `.env` 갱신 → `setup-gcp-secrets.ps1` 재실행 → `gcloud run services update emco-chatbot-api --region=asia-northeast3 --update-secrets=ADMIN_USERNAME=emco-admin-user:latest,ADMIN_PASSWORD=emco-admin-pass:latest`
+- 로컬 dev: `tsx watch`가 `.env`를 자동 로드하지 않아 `api/src/setup.ts`에서 `dotenv.config()` 호출 (prod에선 `.env` 부재이므로 no-op)
+- `gcloud` 기본 프로젝트가 다른 경우 — 항상 `--project=emco-8a3b5` 명시
+
+## 다음에 할 만한 것
 - 내원 의도 감지 (`__BOOKING__` marker) + 예약 카드
 - TTS/STT (서울온케어 패턴 차용)
 - Bing Webmaster 등록
