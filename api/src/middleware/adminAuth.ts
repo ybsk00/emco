@@ -2,7 +2,9 @@ import type { Request, Response, NextFunction } from 'express';
 import crypto from 'node:crypto';
 import { env } from '../config/env.js';
 
-const COOKIE_NAME = 'emco_admin';
+// Firebase Hosting이 Cookie 헤더를 strip 함 — 오직 `__session` 이름만 dynamic backend로 통과시킴
+// https://firebase.google.com/docs/hosting/manage-cache#using_cookies
+const COOKIE_NAME = '__session';
 const TTL_SECONDS = 24 * 60 * 60;
 
 function hmacHex(payload: string): string {
@@ -53,17 +55,19 @@ function parseCookie(header: string | undefined, name: string): string | null {
 export const SESSION_COOKIE_NAME = COOKIE_NAME;
 export const SESSION_TTL_SECONDS = TTL_SECONDS;
 
+// Path=/ — `__session` 쿠키는 Firebase Hosting을 거치는 모든 경로에 전송되어야 함
+// (HttpOnly + Secure + SameSite=Strict 로 보호; 어드민 외 경로에선 서버가 무시)
 export function setSessionCookie(res: Response, token: string): void {
   res.setHeader(
     'Set-Cookie',
-    `${COOKIE_NAME}=${token}; Path=/api/admin; HttpOnly; Secure; SameSite=Strict; Max-Age=${TTL_SECONDS}`,
+    `${COOKIE_NAME}=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${TTL_SECONDS}`,
   );
 }
 
 export function clearSessionCookie(res: Response): void {
   res.setHeader(
     'Set-Cookie',
-    `${COOKIE_NAME}=; Path=/api/admin; HttpOnly; Secure; SameSite=Strict; Max-Age=0`,
+    `${COOKIE_NAME}=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`,
   );
 }
 
