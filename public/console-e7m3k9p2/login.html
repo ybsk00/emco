@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>엠코 어드민 로그인</title>
+  <link rel="stylesheet" href="/console-e7m3k9p2/login.css">
+</head>
+<body>
+  <main class="login-wrap">
+    <form class="login-card" id="login-form" novalidate>
+      <h1>엠코 어드민</h1>
+      <p class="login-sub">관리자만 접근 가능합니다.</p>
+
+      <label class="login-field">
+        <span>아이디</span>
+        <input type="text" name="username" id="login-username" autocomplete="username" required autofocus>
+      </label>
+
+      <label class="login-field">
+        <span>비밀번호</span>
+        <input type="password" name="password" id="login-password" autocomplete="current-password" required>
+      </label>
+
+      <div class="login-error" id="login-error" hidden></div>
+
+      <button type="submit" class="login-btn" id="login-submit">로그인</button>
+    </form>
+  </main>
+
+  <script src="/console-e7m3k9p2/login.js" defer></script>
+</body>
+</html>

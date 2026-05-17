@@ -11,8 +11,16 @@
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   };
 
+  function redirectToLogin() {
+    location.replace('/console-e7m3k9p2/login.html');
+  }
+
   async function fetchJson(url) {
     const r = await fetch(url, { credentials: 'same-origin' });
+    if (r.status === 401) {
+      redirectToLogin();
+      throw new Error('unauthorized');
+    }
     if (!r.ok) {
       const t = await r.text().catch(() => '');
       throw new Error(`${r.status} ${url}: ${t.slice(0, 200)}`);
@@ -118,7 +126,7 @@
       const row = document.createElement('div');
       row.className = 'adm-bar-row';
       row.innerHTML = `
-        <div>${x.category}</div>
+        <div>${escapeHtml(x.category)}</div>
         <div class="adm-bar-track"><div class="adm-bar-fill" style="width: ${((x.count || 0) / maxC * 100).toFixed(1)}%"></div></div>
         <div class="adm-bar-count">${fmtInt(x.count || 0)}</div>
       `;
@@ -219,6 +227,25 @@
   document.getElementById('refresh-btn').addEventListener('click', () => {
     sessionsCursor = null;
     loadSessions(true);
+  });
+
+  // 로그아웃
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' });
+      } catch (e) {}
+      redirectToLogin();
+    });
+  }
+
+  // ESC 로 모달 닫기
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const m = document.getElementById('session-modal');
+      if (m && !m.hidden) m.hidden = true;
+    }
   });
 
   // 초기 로드

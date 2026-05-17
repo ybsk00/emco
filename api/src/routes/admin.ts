@@ -1,21 +1,61 @@
 import { Router, type Request, type Response } from 'express';
 import { z } from 'zod';
+import { env } from '../config/env.js';
 import { supabase } from '../lib/supabase.js';
-import { basicAuth } from '../middleware/basicAuth.js';
-import { publicLimiter } from '../middleware/rateLimiter.js';
+import {
+  adminAuth,
+  mintToken,
+  safeCompare,
+  setSessionCookie,
+  clearSessionCookie,
+} from '../middleware/adminAuth.js';
+import { publicLimiter, aiHeavyLimiter } from '../middleware/rateLimiter.js';
 import { asyncHandler, AppError } from '../middleware/errorHandler.js';
 
 const router = Router();
 
-// 모든 어드민 엔드포인트는 Basic Auth + 일반 rate limit
-router.use(basicAuth);
-router.use(publicLimiter);
-
-// 캐시 금지 (Cloud Run/CDN/브라우저 모두)
+// 캐시 금지 (Cloud Run/CDN/브라우저 모두) — 로그인/로그아웃 포함 전 엔드포인트
 router.use((_req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
   next();
 });
+
+// ── 로그인 (인증 없음) ───────────────────────────────────────
+const loginSchema = z.object({
+  username: z.string().min(1).max(100),
+  password: z.string().min(1).max(200),
+});
+
+router.post(
+  '/login',
+  aiHeavyLimiter, // brute-force 방지 (IP당 분당 30회)
+  asyncHandler(async (req: Request, res: Response) => {
+    if (!env.ADMIN_USERNAME || !env.ADMIN_PASSWORD) {
+      throw new AppError(503, 'ADMIN_NOT_CONFIGURED', '어드민이 설정되지 않았습니다.');
+    }
+    const parsed = loginSchema.safeParse(req.body);
+    if (!parsed.success) {
+      throw new AppError(401, 'UNAUTHORIZED', '아이디 또는 비밀번호가 올바르지 않습니다.');
+    }
+    const userOk = safeCompare(parsed.data.username, env.ADMIN_USERNAME);
+    const passOk = safeCompare(parsed.data.password, env.ADMIN_PASSWORD);
+    if (!(userOk && passOk)) {
+      throw new AppError(401, 'UNAUTHORIZED', '아이디 또는 비밀번호가 올바르지 않습니다.');
+    }
+    setSessionCookie(res, mintToken());
+    res.json({ ok: true });
+  }),
+);
+
+// ── 로그아웃 (인증 필요 없음 — 어차피 쿠키 지움) ──────────────
+router.post('/logout', (_req, res) => {
+  clearSessionCookie(res);
+  res.json({ ok: true });
+});
+
+// ── 이하 모든 엔드포인트는 쿠키 세션 인증 필요 ────────────────
+router.use(adminAuth);
+router.use(publicLimiter);
 
 // GET /api/admin/stats — 전체 대시보드 집계
 router.get(
