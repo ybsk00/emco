@@ -22,16 +22,21 @@
 - 리전: **asia-northeast3** (서울)
 - Cloud Run 서비스: `emco-chatbot-api`
 - Artifact Registry: `cloudrun` repo
-- 시크릿 (Secret Manager): `emco-supabase-key`, `emco-gemini-key`, `emco-ip-salt`
+- 시크릿 (Secret Manager): `emco-supabase-key`, `emco-gemini-key`, `emco-ip-salt`, `emco-admin-user`, `emco-admin-pass`
 
 ## 디렉토리
 
 ```
 emco/
 ├── public/                    Firebase Hosting (정적)
-│   ├── index.html             홈페이지 + 챗봇 모달 + JSON-LD
+│   ├── index.html             홈페이지 + 챗봇 모달 + JSON-LD + 방문자 비콘
 │   ├── styles.css
 │   ├── app.js                 챗봇 vanilla JS (window.emcoChat 글로벌)
+│   ├── console-e7m3k9p2/      어드민 콘솔 (비공개 슬러그)
+│   │   ├── login.html / login.css / login.js   로그인 페이지
+│   │   ├── index.html         대시보드 (방문자 + 챗봇 로그)
+│   │   ├── styles.css         어드민 전용 CSS
+│   │   └── app.js             fetch + SVG 차트 + 세션 모달
 │   ├── sitemap.xml / feed.xml / robots.txt
 │   ├── og-image.{svg,png} + favicon.svg + favicon-{16,32,48}.png
 │   ├── apple-touch-icon.png + android-chrome-{192,512}.png
@@ -39,14 +44,15 @@ emco/
 │   └── googlec189...html      Google verification
 ├── api/                       Cloud Run 백엔드
 │   ├── src/
+│   │   ├── setup.ts                       dotenv.config() — 로컬 dev .env 로드용
 │   │   ├── server.ts
-│   │   ├── routes/patientChatbot.ts
+│   │   ├── routes/{patientChatbot,track,admin}.ts
 │   │   ├── services/
 │   │   │   ├── orchestrator.ts          (4-에이전트 디스패처)
 │   │   │   ├── retriever.ts             (하이브리드 RAG)
 │   │   │   └── agents/{intentRouter,greeting,general,consultation,medical,safety,prompts,utils}.ts
 │   │   ├── lib/{supabase,embedding,gemini}.ts
-│   │   ├── middleware/{cors,errorHandler,rateLimiter}.ts
+│   │   ├── middleware/{cors,errorHandler,rateLimiter,trackLimiter,adminAuth}.ts
 │   │   └── types/chatbot.ts
 │   ├── Dockerfile             pre-built dist 사용 (Cloud Build TS 컴파일 우회)
 │   ├── cloudbuild.yaml
@@ -104,8 +110,11 @@ emco/
 | `emco_chat_sessions` | — | 세션 (ip_hash) |
 | `emco_chat_messages` | — | 메시지 이력 |
 | `emco_chat_analytics` | — | 응답 시간/카테고리/fallback 통계 |
+| `emco_page_views` | — | 방문자 비콘 (path, ip_hash, ua_hash, referrer) |
 
-`emco_match_faq()` RPC — 코사인 거리 기반 벡터 검색.
+RPC: `emco_match_faq()` — 코사인 거리 벡터 검색. `emco_admin_stats()` — 어드민 대시보드 집계 (KST 기준).
+
+모든 `emco_*` 테이블에 RLS 활성화. 백엔드는 service-role 키로 우회.
 
 ## 자주 쓰는 명령
 
@@ -203,6 +212,22 @@ cd scripts; node gen-assets.mjs
 - 현 설정: `*.@(js|css|html)` max-age=0, must-revalidate — 매 요청 ETag 검증, 변경 즉시 반영
 - 이미지(png/svg/woff2)만 max-age=86400
 
+### 12. Firebase Hosting은 `__session` 외 모든 Cookie 헤더를 strip
+- 증상: 어드민 로그인 200 + Set-Cookie 정상 → 다음 요청은 항상 401. 서버 로그엔 `req.headers.cookie === undefined`
+- 원인: Firebase Hosting이 dynamic backend(Cloud Run) 프록시 시 보안상 모든 Cookie 헤더를 제거. **예외는 이름이 정확히 `__session`인 쿠키 하나뿐**.
+- 해결: 어드민 세션 쿠키 이름을 `__session`으로 고정 (`api/src/middleware/adminAuth.ts` 의 `COOKIE_NAME`). Path는 `/` (Firebase 호환).
+- 참고: https://firebase.google.com/docs/hosting/manage-cache#using_cookies
+
+### 13. `cloudbuild.yaml --set-secrets`가 모든 secret 바인딩을 replace
+- 증상: `gcloud builds submit` 직후 어드민 endpoints 503 ADMIN_NOT_CONFIGURED.
+- 원인: `cloudbuild.yaml`의 `--set-secrets=...` 는 기존 바인딩을 **완전히 덮어씀**. 거기 명시 안 된 ADMIN_USERNAME/PASSWORD는 사라짐.
+- 해결: 매 배포 후 `gcloud run services update emco-chatbot-api --region=asia-northeast3 --update-secrets=ADMIN_USERNAME=emco-admin-user:latest,ADMIN_PASSWORD=emco-admin-pass:latest` 로 재주입. 또는 cloudbuild.yaml `--set-secrets`에 두 항목 추가 (권장).
+
+### 14. Firebase `trailingSlash: false` + 서브디렉토리 정적 페이지 = 상대경로 깨짐
+- 증상: `/console-xxx/` 접근 → 301 → `/console-xxx` (슬래시 제거). `index.html` 안의 `<link href="./styles.css">`가 `/styles.css`로 해석 → 404 → 스타일 없음 + JS 미실행.
+- 해결: 서브디렉토리 페이지 자산은 **절대 경로** 사용 — `<link href="/console-xxx/styles.css">`, `<script src="/console-xxx/app.js">`.
+- 홈페이지(`/`)는 영향 없음 (루트라 상대경로도 OK).
+
 ## 도메인 / DNS
 
 가비아에서 관리. A 레코드 두 개:
@@ -222,12 +247,18 @@ OG 이미지나 description 변경 후 카톡 미리보기는 자동 갱신 안 
 
 ## 어드민 콘솔
 
-- 경로: `https://emcokids.co.kr/console-e7m3k9p2/` (외부 노출 금지, sitemap/robots 차단)
-- 인증: HTTP Basic Auth — `emcoadmin` / `admin1234` (약한 비밀번호 → 추후 강한 값으로 교체 권장)
+- 진입: `https://emcokids.co.kr/console-e7m3k9p2/login.html` (외부 노출 금지, sitemap/robots/X-Robots-Tag 차단)
+- 미인증 상태로 대시보드 접근 시 자동으로 login.html 로 리다이렉트
+- 자격증명: `emcoadmin` / `admin1234` (약한 비밀번호 → 추후 강한 값으로 교체 권장)
 - 시크릿: GCP Secret Manager `emco-admin-user`, `emco-admin-pass` → Cloud Run env `ADMIN_USERNAME`, `ADMIN_PASSWORD`
+- 인증 방식: 커스텀 로그인 폼 → `POST /api/admin/login` 검증 성공 시 HMAC-서명 세션 쿠키 발급 (24h TTL)
+  - **쿠키 이름은 `__session` 고정** — Firebase Hosting이 그 외 이름의 Cookie 헤더를 strip 함 (함정 #12 참조)
+  - `HttpOnly; Secure; SameSite=Strict; Path=/`
+  - HMAC 비밀키는 기존 `IP_HASH_SALT` 재사용 (별도 secret 추가 없음)
 - 데이터: `emco_page_views` (방문자 비콘) + 기존 `emco_chat_*` (챗봇 로그)
 - 집계 RPC: `emco_admin_stats()` — KST 일자 경계, 단일 호출로 모든 지표 반환
 - 방문자 비콘은 `<head>` 끝에서 `sendBeacon('/api/track')` 호출 — `/console-*` 경로는 서버에서 카운트 제외
+- 어드민 대시보드 정적 자산은 **절대 경로** (`/console-e7m3k9p2/styles.css`) — Firebase `trailingSlash: false` 때문 (함정 #14)
 - 비밀번호 회전 시: `.env` 갱신 → `setup-gcp-secrets.ps1` 재실행 → `gcloud run services update emco-chatbot-api --region=asia-northeast3 --update-secrets=ADMIN_USERNAME=emco-admin-user:latest,ADMIN_PASSWORD=emco-admin-pass:latest`
 - 로컬 dev: `tsx watch`가 `.env`를 자동 로드하지 않아 `api/src/setup.ts`에서 `dotenv.config()` 호출 (prod에선 `.env` 부재이므로 no-op)
 - `gcloud` 기본 프로젝트가 다른 경우 — 항상 `--project=emco-8a3b5` 명시
