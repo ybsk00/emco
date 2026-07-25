@@ -50,15 +50,36 @@ if (!SUPABASE_URL || !SUPABASE_KEY) {
 }
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+// 네이버 SERP 캐러셀 ItemList — 신규 생성 블로그 페이지에 자동 주입(2026-07-23).
+const CAROUSEL_LD = (() => {
+  try {
+    return `<script type="application/ld+json">${JSON.stringify(JSON.parse(readFileSync("public/carousel/itemlist.json", "utf-8")))}</script>\n`;
+  } catch { return ""; }
+})();
+
 
 /** emcokids.co.kr 짧은 slug ↔ lumiaeo 긴 slug 매핑 (sitemap·firebase.json과 동기) */
 const SLUG_MAP = {
+  "vaccination-schedule": "sangbong-peds-vaccination-standard-schedule-amco",
   "flu-vaccine-family": "sangbong-peds-vaccination-flu-family-pack-amco",
   "post-vaccine-fever": "sangbong-peds-vaccination-after-shot-symptoms-amco",
   "flu-rapid-test": "sangbong-peds-cold-flu-rapid-test-15min-amco",
   "well-child-checkup": "sangbong-peds-well-child-exam-compare-friendly-amco",
   "growth-curve-tips": "sangbong-peds-well-child-exam-growth-curve-tips-amco",
   "cold-flu-symptoms": "sangbong-peds-cold-flu-symptoms-amco",
+  "otitis-media": "sangbong-peds-otitis-media-signs-care-amco",
+  "constipation": "sangbong-peds-constipation-signs-care-amco",
+  "sinusitis": "sangbong-peds-sinusitis-lingering-cold-amco",
+  "precocious-puberty": "sangbong-peds-precocious-puberty-signs-amco",
+  "febrile-seizure": "sangbong-peds-febrile-seizure-first-aid-amco",
+  "acute-gastroenteritis": "sangbong-peds-acute-gastroenteritis-dehydration-amco",
+  "swimmer-ear-otitis-externa": "sangbong-peds-swimmer-ear-otitis-externa-amco",
+  "adenovirus-conjunctivitis": "sangbong-peds-adenovirus-conjunctivitis-amco",
+  "urticaria-hives-care": "sangbong-peds-urticaria-hives-care-amco",
+  "child-fever-antipyretics-home-care": "sangbong-peds-fever-antipyretics-home-care-amco",
+  "bronchiolitis-rsv-wheezing": "sangbong-peds-bronchiolitis-rsv-wheezing-amco",
+  "functional-abdominal-pain": "sangbong-peds-functional-abdominal-pain-amco",
+  "bedwetting-enuresis": "sangbong-peds-bedwetting-enuresis-care-amco",
 };
 
 const CATEGORY_TAG_CLASS = {
@@ -403,7 +424,7 @@ function renderHTML({ shortSlug, content }) {
 <script type="application/ld+json">
 ${JSON.stringify(jsonLd, null, 1)}
 </script>
-</head>
+${CAROUSEL_LD}</head>
 <body>
 
 <header style="padding: 16px 24px; border-bottom: 1px solid var(--color-border); background: var(--color-cream);">

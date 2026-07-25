@@ -2,7 +2,7 @@
 import crypto from 'node:crypto';
 import { z } from 'zod';
 import { env } from '../config/env.js';
-import { supabase } from '../lib/supabase.js';
+import { db, FieldValue, COL, tsToIso } from '../lib/firestore.js';
 import { chatbotCors } from '../middleware/cors.js';
 import { aiHeavyLimiter, publicLimiter } from '../middleware/rateLimiter.js';
 import { asyncHandler, AppError } from '../middleware/errorHandler.js';
@@ -56,28 +56,33 @@ router.post(
 
     // 세션 생성 또는 last_seen 업데이트
     if (!sessionId) {
-      const { data, error } = await supabase
-        .from('emco_chat_sessions')
-        .insert({ ip_hash: ipHash, user_agent: userAgent })
-        .select('id')
-        .single();
-      if (error || !data) {
-        console.error('[/chat] session create error:', error);
+      sessionId = crypto.randomUUID();
+      try {
+        await db.collection(COL.sessions).doc(sessionId).set({
+          ip_hash: ipHash,
+          user_agent: userAgent,
+          metadata: {},
+          created_at: FieldValue.serverTimestamp(),
+          last_seen_at: FieldValue.serverTimestamp(),
+        });
+      } catch (e) {
+        console.error('[/chat] session create error:', e);
         throw new AppError(500, 'SESSION_CREATE_FAILED', '세션 생성 실패');
       }
-      sessionId = data.id as string;
     } else {
-      await supabase
-        .from('emco_chat_sessions')
-        .update({ last_seen_at: new Date().toISOString() })
-        .eq('id', sessionId);
+      await db
+        .collection(COL.sessions)
+        .doc(sessionId)
+        .set({ last_seen_at: FieldValue.serverTimestamp() }, { merge: true })
+        .then(undefined, (e) => console.error('[/chat] session touch error:', e));
     }
 
     // 사용자 메시지 저장
-    await supabase.from('emco_chat_messages').insert({
+    await db.collection(COL.messages).add({
       session_id: sessionId,
       role: 'user',
       content: query,
+      created_at: FieldValue.serverTimestamp(),
     });
 
     // 스트리밍 헤더 — 압축·버퍼링 우회
@@ -115,12 +120,13 @@ router.post(
       fullResponse = result.fullResponse;
 
       // 어시스턴트 메시지 저장
-      await supabase.from('emco_chat_messages').insert({
+      await db.collection(COL.messages).add({
         session_id: sessionId,
         role: 'assistant',
         content: fullResponse,
         category: category && category !== 'general' ? category : null,
         metadata: { intent, hadSources, isFallback },
+        created_at: FieldValue.serverTimestamp(),
       });
     } catch (err) {
       console.error('[/chat] orchestrate error:', err);
@@ -130,15 +136,16 @@ router.post(
       } catch {}
       fullResponse = errMsg;
       isFallback = true;
-      await supabase.from('emco_chat_messages').insert({
+      await db.collection(COL.messages).add({
         session_id: sessionId,
         role: 'assistant',
         content: errMsg,
         metadata: { error: true, errorMessage: (err as Error)?.message?.slice(0, 300) },
+        created_at: FieldValue.serverTimestamp(),
       }).then(undefined, () => undefined);
     } finally {
       const responseTime = Date.now() - startTime;
-      await supabase.from('emco_chat_analytics').insert({
+      await db.collection(COL.analytics).add({
         session_id: sessionId,
         query,
         intent,
@@ -147,6 +154,7 @@ router.post(
         had_sources: hadSources,
         is_fallback: isFallback,
         retrieved_count: retrievedCount,
+        created_at: FieldValue.serverTimestamp(),
       }).then(undefined, (e) => console.error('[/chat] analytics save:', e));
 
       console.log(`[/chat] intent=${intent} cat=${category} ${responseTime}ms fallback=${isFallback}`);
@@ -161,12 +169,21 @@ router.get(
   publicLimiter,
   asyncHandler(async (req: Request, res: Response) => {
     const id = z.string().uuid().parse(req.params.id);
-    const { data, error } = await supabase
-      .from('emco_chat_messages')
-      .select('id, role, content, category, created_at')
-      .eq('session_id', id)
-      .order('created_at', { ascending: true });
-    if (error) throw new AppError(500, 'DB_ERROR', '세션 조회 실패');
+    const snap = await db
+      .collection(COL.messages)
+      .where('session_id', '==', id)
+      .orderBy('created_at', 'asc')
+      .get();
+    const data = snap.docs.map((doc) => {
+      const m = doc.data();
+      return {
+        id: doc.id,
+        role: m.role,
+        content: m.content,
+        category: m.category ?? null,
+        created_at: tsToIso(m.created_at),
+      };
+    });
     res.json({ success: true, data });
   }),
 );

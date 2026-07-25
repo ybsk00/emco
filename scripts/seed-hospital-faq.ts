@@ -5,24 +5,32 @@
  *   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, GEMINI_API_KEY
  */
 import 'dotenv/config';
-import { createClient } from '@supabase/supabase-js';
+import crypto from 'node:crypto';
+import { initializeApp, applicationDefault, getApps } from 'firebase-admin/app';
+import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 
 const EMBED_DIM = 768;
 const EMBED_MODEL = process.env.GEMINI_EMBEDDING_MODEL || 'gemini-embedding-001';
 const EMBED_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${EMBED_MODEL}:embedContent`;
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://wltqkxesvtfwotcngzjj.supabase.co';
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const PROJECT_ID = process.env.GCLOUD_PROJECT || 'emco-8a3b5';
 const GEMINI_KEY = process.env.GEMINI_API_KEY!;
 
-if (!SUPABASE_KEY || !GEMINI_KEY) {
-  console.error('환경변수 누락: SUPABASE_SERVICE_ROLE_KEY, GEMINI_API_KEY');
+if (!GEMINI_KEY) {
+  console.error('환경변수 누락: GEMINI_API_KEY');
   process.exit(1);
 }
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: { persistSession: false, autoRefreshToken: false },
-});
+// Firestore — ADC (gcloud auth application-default login)
+if (!getApps().length) initializeApp({ credential: applicationDefault(), projectId: PROJECT_ID });
+const db = getFirestore();
+db.settings({ ignoreUndefinedProperties: true });
+const COL_FAQ = 'emco_faq';
+
+// 질문 텍스트 기반 결정적 doc id — 재실행 시 멱등(중복 skip)
+function faqDocId(question: string): string {
+  return 'faq_' + crypto.createHash('sha1').update(question).digest('hex').slice(0, 20);
+}
 
 async function embedDoc(text: string): Promise<number[] | null> {
   const trimmed = text.slice(0, 7500);
@@ -284,6 +292,127 @@ const FAQS: FaqItem[] = [
       '신체 진료 중 정서 상태에 대한 일반 상담은 가능합니다.\n다만 본격적인 우울·불안·ADHD 등 정신과적 평가가 필요한 경우 소아청소년정신과로 연계해 드릴 수 있어요.\n부모님과 함께 와주시는 게 가장 좋아요. 🌷',
     tags: ['청소년상담'],
   },
+
+  // ─── 홈페이지(emcokids.co.kr) 기반 추가 FAQ ───
+  {
+    category: 'general',
+    question: '워킹맘인데 퇴근 후에도 진료받을 수 있나요?',
+    answer:
+      '네! 월·화·목·금은 밤 8시(20시)까지 야간진료를 해서 퇴근 후에도 여유롭게 오실 수 있어요.\n워킹맘·맞벌이 부부도 부담 없이 찾는 동네 주치의랍니다.\n다만 수요일은 정기휴무이고, 점심시간(13~14시)은 휴진이에요. 🌙',
+    tags: ['야간진료', '워킹맘'],
+  },
+  {
+    category: 'general',
+    question: '면목동·신내동·망우동에서도 다닐 만한가요?',
+    answer:
+      '네, 엠코소아청소년과는 상봉동에 있지만 망우동·면목동·신내동 등 중랑구 전 지역에서 많이 찾아주세요.\n망우역(경의중앙선)·상봉역(7호선)에서 도보 5분이라 대중교통도 편해요.',
+    tags: ['지역', '중랑구'],
+  },
+  {
+    category: 'general',
+    question: '지하철로 어떻게 가나요?',
+    answer:
+      '망우역(경의중앙선)과 상봉역(7호선) 두 역 모두에서 도보 5분 거리예요.\n주소는 서울 중랑구 망우로 353 현대프리미어스엠코 C동 308호(상봉동)입니다. 🚇',
+    tags: ['지하철', '오시는길'],
+  },
+  {
+    category: 'general',
+    question: '응급실 대신 와도 되나요?',
+    answer:
+      '아이 상태가 안정적이라면 야간(평일 20시까지)·주말·공휴일에도 여는 저희 같은 동네 소아과가 응급실보다 대기도 짧고 편해요.\n다만 의식저하·경련·호흡곤란·심한 외상이 있으면 즉시 119나 응급실로 가셔야 합니다.',
+    tags: ['응급실', '야간진료'],
+  },
+  {
+    category: 'general',
+    question: '평생 주치의가 무슨 뜻인가요?',
+    answer:
+      '유신 원장님 한 분이 아이를 신생아 때부터 청소년기까지 쭉 지켜보며 진료한다는 뜻이에요.\n아이의 성장 이력을 잘 아는 주치의가 꾸준히 봐드리는 게 엠코의 약속이랍니다. 🌷',
+    tags: ['평생주치의', '원장'],
+  },
+  {
+    category: 'general',
+    question: '카드 결제 되나요?',
+    answer:
+      '네, 건강보험 적용 진료에 현금·신용카드 모두 가능합니다.\n비급여 항목 비용은 02-433-5275로 문의해 주세요.',
+    tags: ['결제', '카드'],
+  },
+  {
+    category: 'cold',
+    question: '감기인지 독감인지 어떻게 구분하나요?',
+    answer:
+      '독감은 고열·근육통·오한 같은 전신 증상이 갑자기 심하게 오고, 감기는 콧물·기침 같은 국소 증상이 서서히 나타나요.\n정확한 구분은 독감 신속항원검사로 15분 안에 확인할 수 있어요.',
+    tags: ['감기독감구분'],
+  },
+  {
+    category: 'cold',
+    question: '아토피 피부염도 진료하나요?',
+    answer:
+      '네, 엠코소아청소년과는 아토피 피부염·두드러기·알레르기 비염 같은 만성 피부·면역 질환도 진료해요.\n보습·생활관리부터 약물 치료까지 아이에 맞게 도와드려요.',
+    tags: ['아토피', '알레르기'],
+  },
+  {
+    category: 'cold',
+    question: '알레르기 비염도 봐주시나요?',
+    answer:
+      '네, 알레르기 비염 진료 가능해요.\n코막힘·재채기·눈가려움이 반복되면 원인과 관리법을 함께 봐드려요. 증상이 오래가면 한 번 들러주세요.',
+    tags: ['알레르기비염'],
+  },
+  {
+    category: 'cold',
+    question: '독감 신속검사는 결과가 얼마나 걸리나요?',
+    answer:
+      '약 15분 안에 결과를 확인할 수 있어요.\n증상 시작 후 24~48시간 안에 검사하면 정확도가 가장 높아요. 독감·코로나 신속검사 모두 가능합니다. ⚡',
+    tags: ['신속검사'],
+  },
+  {
+    category: 'vaccine',
+    question: 'HPV(자궁경부암) 백신도 맞을 수 있나요?',
+    answer:
+      '네, 청소년 대상 HPV 백신 접종 가능해요.\n만 12세 전후 국가지원 대상이면 무료 접종도 받을 수 있어요. 자세한 일정·비용은 02-433-5275로 문의해 주세요.',
+    tags: ['HPV', '청소년접종'],
+  },
+  {
+    category: 'vaccine',
+    question: '우리 아이 예방접종 일정을 관리해 주나요?',
+    answer:
+      '네, 국가필수 접종부터 선택 접종까지 빠뜨리지 않게 일정을 챙겨드려요.\n아이 개월 수를 알려주시면 다음 접종이 무엇인지 안내해드릴 수 있어요. 💉',
+    tags: ['접종일정관리'],
+  },
+  {
+    category: 'checkup',
+    question: '영유아 검진 때 발달검사도 같이 하나요?',
+    answer:
+      '네, 국가 영유아 건강검진에는 K-DST 발달선별검사가 함께 포함돼요.\n말이 늦거나 또래보다 발달이 걱정되는 부분이 있으면 미리 메모해 오시면 좋아요.',
+    tags: ['발달검사', '영유아검진'],
+  },
+  {
+    category: 'growth',
+    question: '골연령(뼈나이) 검사도 하나요?',
+    answer:
+      '네, 키 성장 평가 시 손목 X-ray로 골연령을 확인해 성장 잠재력을 봐요.\n성장곡선·BMI·골연령을 종합해 아이의 성장을 체계적으로 평가합니다.',
+    tags: ['골연령', '성장평가'],
+  },
+  {
+    category: 'growth',
+    question: '키 성장은 어떻게 평가하나요?',
+    answer:
+      '성장곡선(백분위)·BMI·골연령(X-ray)을 종합적으로 봐요.\n3백분위수 미만이거나 1년에 4cm 미만으로 자라면 진료를 권해요. 정기적으로 추적하며 관리해드립니다.',
+    tags: ['키성장평가'],
+  },
+  {
+    category: 'teen',
+    question: '청소년 학생 건강검진도 받을 수 있나요?',
+    answer:
+      '네, 초·중·고 학생 건강검진과 상담 가능해요 (만 7~18세).\n키·체중·시력·혈압 같은 기본 항목과 사춘기 성장·정서 상담도 함께 봐드려요.',
+    tags: ['청소년검진', '학생검진'],
+  },
+  {
+    category: 'emergency',
+    question: '밤에 아이가 갑자기 열이 나면 응급실에 가야 하나요?',
+    answer:
+      '아이 활력징후가 안정적이면 평일 밤 8시(20시)까지 운영하는 저희 야간진료를 이용하시는 게 좋아요 (수요일 정기휴무).\n다만 의식저하·경련·호흡곤란이 함께 있으면 즉시 응급실로 가셔야 합니다.',
+    tags: ['야간발열', '응급실'],
+  },
 ];
 
 async function main() {
@@ -295,15 +424,10 @@ async function main() {
 
   for (const faq of FAQS) {
     try {
-      // 중복 체크 — 같은 question 이 이미 있으면 skip
-      const { data: existing } = await supabase
-        .from('emco_faq')
-        .select('id')
-        .eq('source_type', 'faq')
-        .eq('question', faq.question)
-        .limit(1);
-
-      if (existing && existing.length > 0) {
+      // 중복 체크 — 같은 question(결정적 doc id)이 이미 있으면 skip
+      const ref = db.collection(COL_FAQ).doc(faqDocId(faq.question));
+      const snap = await ref.get();
+      if (snap.exists) {
         skipped++;
         continue;
       }
@@ -316,7 +440,7 @@ async function main() {
         continue;
       }
 
-      const { error } = await supabase.from('emco_faq').insert({
+      await ref.set({
         question: faq.question,
         answer: faq.answer,
         category: faq.category,
@@ -324,14 +448,11 @@ async function main() {
         source_url: null,
         source_title: '엠코소아청소년과 안내',
         language: 'ko',
-        embedding,
+        embedding: FieldValue.vector(embedding),
         metadata: { tags: faq.tags ?? [] },
+        is_active: true,
+        created_at: FieldValue.serverTimestamp(),
       });
-      if (error) {
-        console.error(`[seed] insert 실패: ${faq.question}`, error);
-        failed++;
-        continue;
-      }
       inserted++;
       process.stdout.write(`✓ ${inserted}/${FAQS.length}  ${faq.question.slice(0, 30)}...\n`);
       // soft rate limit

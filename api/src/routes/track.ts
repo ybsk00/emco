@@ -2,7 +2,7 @@ import { Router, type Request, type Response } from 'express';
 import crypto from 'node:crypto';
 import { z } from 'zod';
 import { env } from '../config/env.js';
-import { supabase } from '../lib/supabase.js';
+import { db, FieldValue, COL } from '../lib/firestore.js';
 import { trackLimiter } from '../middleware/trackLimiter.js';
 import { asyncHandler } from '../middleware/errorHandler.js';
 
@@ -41,13 +41,14 @@ router.post(
     const ip = req.ip || req.socket.remoteAddress || 'unknown';
     const ua = String(req.headers['user-agent'] || '');
 
-    await supabase
-      .from('emco_page_views')
-      .insert({
+    await db
+      .collection(COL.pageViews)
+      .add({
         path,
         ip_hash: hashIP(ip),
         ua_hash: ua ? hashUA(ua) : null,
         referrer: ref ?? null,
+        created_at: FieldValue.serverTimestamp(),
       })
       .then(undefined, (e) => console.error('[/track] insert error:', e));
 

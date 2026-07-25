@@ -4,8 +4,8 @@ const schema = z.object({
   PORT: z.coerce.number().int().positive().default(8080),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('production'),
 
-  SUPABASE_URL: z.string().url(),
-  SUPABASE_SERVICE_ROLE_KEY: z.string().min(20),
+  // DB: Firestore(ADC). 별도 URL/키 불필요. 프로젝트는 메타데이터/기본값으로 결정.
+  GCLOUD_PROJECT: z.string().default('emco-8a3b5'),
 
   GEMINI_API_KEY: z.string().min(10),
   GEMINI_MODEL: z.string().default('gemini-2.5-flash'),

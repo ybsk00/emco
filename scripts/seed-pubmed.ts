@@ -16,27 +16,30 @@
  *   - 중간 실패해도 PMID 단위 재실행 가능
  */
 import 'dotenv/config';
-import { createClient } from '@supabase/supabase-js';
+import { initializeApp, applicationDefault, getApps } from 'firebase-admin/app';
+import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 
 const EMBED_DIM = 768;
 const EMBED_MODEL = process.env.GEMINI_EMBEDDING_MODEL || 'gemini-embedding-001';
 const EMBED_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${EMBED_MODEL}:embedContent`;
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://wltqkxesvtfwotcngzjj.supabase.co';
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const PROJECT_ID = process.env.GCLOUD_PROJECT || 'emco-8a3b5';
 const GEMINI_KEY = process.env.GEMINI_API_KEY!;
 const NCBI_KEY = process.env.NCBI_API_KEY || '';
 const NCBI_EMAIL = process.env.NCBI_EMAIL || '';
 const NCBI_TOOL = 'emco-chatbot';
 
-if (!SUPABASE_KEY || !GEMINI_KEY) {
-  console.error('환경변수 누락: SUPABASE_SERVICE_ROLE_KEY, GEMINI_API_KEY');
+if (!GEMINI_KEY) {
+  console.error('환경변수 누락: GEMINI_API_KEY');
   process.exit(1);
 }
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: { persistSession: false, autoRefreshToken: false },
-});
+// Firestore — ADC. pmid 를 doc id 로 써서 멱등(재실행 시 중복 skip)
+if (!getApps().length) initializeApp({ credential: applicationDefault(), projectId: PROJECT_ID });
+const db = getFirestore();
+db.settings({ ignoreUndefinedProperties: true });
+const COL_FAQ = 'emco_faq';
+const pmidDocId = (pmid: string) => `pmid_${pmid}`;
 
 type Cat = 'general' | 'vaccine' | 'checkup' | 'cold' | 'emergency' | 'growth' | 'teen';
 
@@ -299,15 +302,20 @@ async function fetchArticles(pmids: string[]): Promise<PubMedArticle[]> {
 
 async function alreadySeeded(pmids: string[]): Promise<Set<string>> {
   if (pmids.length === 0) return new Set();
-  const { data, error } = await supabase
-    .from('emco_faq')
-    .select('pmid')
-    .in('pmid', pmids);
-  if (error) {
-    console.error('[seed-pubmed] alreadySeeded query error', error);
-    return new Set();
+  const set = new Set<string>();
+  try {
+    for (let i = 0; i < pmids.length; i += 100) {
+      const chunk = pmids.slice(i, i + 100);
+      const refs = chunk.map((p) => db.collection(COL_FAQ).doc(pmidDocId(p)));
+      const snaps = await db.getAll(...refs);
+      snaps.forEach((s, idx) => {
+        if (s.exists) set.add(chunk[idx]);
+      });
+    }
+  } catch (err) {
+    console.error('[seed-pubmed] alreadySeeded query error', err);
   }
-  return new Set((data ?? []).map((r) => r.pmid as string));
+  return set;
 }
 
 async function embedText(text: string): Promise<number[] | null> {
@@ -379,26 +387,24 @@ async function processTopic(topic: Topic): Promise<{ inserted: number; skipped: 
       const sourceUrl = `https://pubmed.ncbi.nlm.nih.gov/${a.pmid}/`;
       const sourceTitle = `${a.journal}${a.year ? ` (${a.year})` : ''}`.trim();
 
-      const { error } = await supabase.from('emco_faq').insert({
-        question: a.title.slice(0, 500),
-        answer: a.abstract,
-        category: topic.category,
-        source_type: 'pubmed',
-        source_url: sourceUrl,
-        source_title: sourceTitle,
-        pmid: a.pmid,
-        language: 'en',
-        embedding,
-        metadata: { year: a.year, journal: a.journal },
-      });
-      if (error) {
-        if (error.code === '23505') {
-          // unique violation on pmid — race
-          skipped++;
-        } else {
-          console.error(`[seed-pubmed] insert error pmid=${a.pmid}:`, error.message);
-          failed++;
-        }
+      try {
+        await db.collection(COL_FAQ).doc(pmidDocId(a.pmid)).set({
+          question: a.title.slice(0, 500),
+          answer: a.abstract,
+          category: topic.category,
+          source_type: 'pubmed',
+          source_url: sourceUrl,
+          source_title: sourceTitle,
+          pmid: a.pmid,
+          language: 'en',
+          embedding: FieldValue.vector(embedding),
+          metadata: { year: a.year, journal: a.journal },
+          is_active: true,
+          created_at: FieldValue.serverTimestamp(),
+        });
+      } catch (err) {
+        console.error(`[seed-pubmed] insert error pmid=${a.pmid}:`, (err as Error).message);
+        failed++;
         continue;
       }
       inserted++;
@@ -427,13 +433,14 @@ async function main() {
   }
 
   // 최종 통계
-  const { count } = await supabase
-    .from('emco_faq')
-    .select('*', { count: 'exact', head: true })
-    .eq('source_type', 'pubmed');
+  let count: number | string = '?';
+  try {
+    const snap = await db.collection(COL_FAQ).where('source_type', '==', 'pubmed').count().get();
+    count = snap.data().count;
+  } catch {}
   console.log(`\n=== PubMed 시딩 종료 ===`);
   console.log(`이번 실행: 추가 ${totals.inserted}, skip ${totals.skipped}, 실패 ${totals.failed}`);
-  console.log(`현재 DB pubmed 총: ${count ?? '?'}개`);
+  console.log(`현재 DB pubmed 총: ${count}개`);
 }
 
 main().catch((err) => {

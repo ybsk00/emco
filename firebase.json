@@ -8,13 +8,7 @@
       { "source": "/blog/burn-first-aid",        "destination": "/blog", "type": 301 },
       { "source": "/blog/burn-home-prevention",  "destination": "/blog", "type": 301 },
       { "source": "/blog/clinic-vs-er",          "destination": "/blog", "type": 301 },
-      { "source": "/blog/burn-degree-guide",     "destination": "/blog", "type": 301 },
-      { "source": "/blog/flu-vaccine-family",    "destination": "/blog", "type": 301 },
-      { "source": "/blog/post-vaccine-fever",    "destination": "/blog", "type": 301 },
-      { "source": "/blog/flu-rapid-test",        "destination": "/blog", "type": 301 },
-      { "source": "/blog/well-child-checkup",    "destination": "/blog", "type": 301 },
-      { "source": "/blog/growth-curve-tips",     "destination": "/blog", "type": 301 },
-      { "source": "/blog/cold-flu-symptoms",     "destination": "/blog", "type": 301 }
+      { "source": "/blog/burn-degree-guide",     "destination": "/blog", "type": 301 }
     ],
     "rewrites": [
       {
