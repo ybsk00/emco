@@ -1,193 +1,221 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0"
-     xmlns:atom="http://www.w3.org/2005/Atom"
-     xmlns:dc="http://purl.org/dc/elements/1.1/"
-     xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>엠코소아청소년과의원 · 동네 소아과 건강 정보</title>
+    <title><![CDATA[엠코소아청소년과의원 — 소아 건강 매거진]]></title>
     <link>https://emcokids.co.kr/</link>
     <atom:link href="https://emcokids.co.kr/feed.xml" rel="self" type="application/rss+xml"/>
-    <description>서울 중랑구 상봉동 엠코소아청소년과의원에서 보내드리는 부모님을 위한 건강 정보. 예방접종, 영유아 검진, 키 성장, 감기·독감 등.</description>
-    <language>ko-KR</language>
-    <copyright>© 2026 엠코소아청소년과의원</copyright>
-    <managingEditor>info@emcokids.co.kr (엠코소아청소년과의원)</managingEditor>
-    <webMaster>info@emcokids.co.kr (엠코소아청소년과의원)</webMaster>
-    <lastBuildDate>Wed, 22 Jul 2026 00:00:00 +0900</lastBuildDate>
-    <pubDate>Wed, 22 Jul 2026 00:00:00 +0900</pubDate>
-    <ttl>60</ttl>
-    <category>건강</category>
-    <category>소아과</category>
-    <category>육아</category>
-    <generator>emcokids.co.kr</generator>
-
+    <description><![CDATA[중랑구 상봉 엠코소아청소년과의원이 진료 기준으로 정리한 소아 감염·알레르기·성장·발달 정보]]></description>
+    <language>ko</language>
+    <lastBuildDate>Tue, 28 Jul 2026 00:00:00 +0000</lastBuildDate>
     <item>
-      <title>아이가 열이 나요 — 소아 발열, 해열제 사용법과 집에서 돌보는 법</title>
+      <title><![CDATA[우리 아이가 또래보다 작아요 — 성장 평가와 검사는 언제 하나]]></title>
+      <link>https://emcokids.co.kr/blog/growth-hormone-short-stature</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/blog/growth-hormone-short-stature</guid>
+      <description><![CDATA[키가 작다는 사실 하나만으로 치료 대상이 되지는 않습니다. 성장 곡선을 어떻게 보는지, 어떤 순서로 검사하는지, 성장호르몬 검사가 필요한 시점과 흔한 오해를 상봉동 엠코소아청소년과의원이 정리했습니다.]]></description>
+      <pubDate>Tue, 28 Jul 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[아이가 자꾸 배가 아프다고 해요 — 반복 복통, 언제 검사하고 어떻게 도울까]]></title>
+      <link>https://emcokids.co.kr/blog/functional-abdominal-pain</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/blog/functional-abdominal-pain</guid>
+      <description><![CDATA[학령기 아이의 반복되는 배아픔은 기능성 복통인 경우가 많지만, 놓치면 안 되는 경고 신호도 있습니다. 감별이 필요한 증상, 집에서 관찰할 것, 상봉동 엠코소아청소년과의원의 진료 접근을 정리했습니다.]]></description>
+      <pubDate>Sat, 25 Jul 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[밤에 이불에 실수하는 아이 — 야뇨증, 언제부터 진료가 필요할까]]></title>
+      <link>https://emcokids.co.kr/blog/bedwetting-enuresis</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/blog/bedwetting-enuresis</guid>
+      <description><![CDATA[만 5세 이후에도 밤에 소변을 가리지 못하는 야뇨증은 드물지 않으며 아이의 잘못이 아닙니다. 원인, 집에서 시도할 수 있는 습관 관리, 진료와 치료를 고려하는 시점을 상봉동 엠코소아청소년과의원이 정리했습니다.]]></description>
+      <pubDate>Sat, 25 Jul 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[아이가 쌕쌕거리며 숨쉬어요 — 모세기관지염과 RSV, 집에서 볼 신호]]></title>
+      <link>https://emcokids.co.kr/blog/bronchiolitis-rsv-wheezing</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/blog/bronchiolitis-rsv-wheezing</guid>
+      <description><![CDATA[감기인 줄 알았는데 숨소리가 쌕쌕거리고 가빠진다면 모세기관지염일 수 있습니다. RSV가 무엇인지, 어떤 호흡 신호에서 바로 병원에 가야 하는지, 집에서 할 수 있는 관리를 정리했습니다.]]></description>
+      <pubDate>Thu, 23 Jul 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[아이가 열이 나요 — 소아 발열, 해열제 사용법과 집에서 돌보는 법]]></title>
       <link>https://emcokids.co.kr/blog/child-fever-antipyretics-home-care</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/child-fever-antipyretics-home-care</guid>
-      <pubDate>Wed, 22 Jul 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>발열</category>
-      <description><![CDATA[아이가 열날 때 해열제는 몇 도부터, 어떻게 먹여야 할까요. 아세트아미노펜·이부프로펜의 사용과 교차복용, 미온수와 수분 관리, 바로 진료가 필요한 신호를 정리했습니다.]]></description>
+      <description><![CDATA[아이가 열날 때 해열제는 몇 도부터, 어떻게 먹여야 할까요. 아세트아미노펜·이부프로펜의 사용과 교차복용, 미온수와 수분 관리, 바로 진료가 필요한 신호를 상봉동 엠코소아청소년과의원이 정리했습니다.]]></description>
+      <pubDate>Wed, 22 Jul 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>물놀이 다녀온 뒤 귀가 아프대요 — 여름철 소아 외이도염(수영자의 귀)</title>
+      <title><![CDATA[물놀이 다녀온 뒤 귀가 아프대요 — 여름철 소아 외이도염(수영자의 귀)]]></title>
       <link>https://emcokids.co.kr/blog/swimmer-ear-otitis-externa</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/swimmer-ear-otitis-externa</guid>
-      <pubDate>Sun, 19 Jul 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>감염병</category>
-      <description><![CDATA[여름 물놀이 후 귀 통증은 중이염이 아니라 외이도염인 경우가 많습니다. 중이염과의 차이, 면봉을 쓰면 안 되는 이유, 진료가 필요한 신호와 예방 습관을 정리했습니다.]]></description>
+      <description><![CDATA[여름 물놀이 후 귀 통증은 중이염이 아니라 외이도염인 경우가 많습니다. 중이염과의 차이, 집에서 하면 안 되는 면봉 습관, 진료가 필요한 신호를 중랑구 상봉동 엠코소아청소년과의원이 정리했습니다.]]></description>
+      <pubDate>Sun, 19 Jul 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>눈곱 끼는 감기? 여름 유행성 결막염 — 아데노바이러스 감염의 특징과 등원 기준</title>
+      <title><![CDATA[눈곱 끼는 감기? 여름 유행성 결막염 — 아데노바이러스 감염의 특징과 등원 기준]]></title>
       <link>https://emcokids.co.kr/blog/adenovirus-conjunctivitis</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/adenovirus-conjunctivitis</guid>
-      <pubDate>Sun, 19 Jul 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>감염병</category>
-      <description><![CDATA[여름철 고열+인후통+눈 충혈·눈곱 조합은 아데노바이러스 감염(인두결막열)의 전형적 모습입니다. 특징 증상과 가정 내 전염 차단 수칙, 등원 기준을 정리했습니다.]]></description>
+      <description><![CDATA[여름철 아이가 열나면서 눈이 빨개지고 눈곱이 낀다면 아데노바이러스 감염(유행성 결막염·인두결막열)일 수 있습니다. 특징 증상, 전염 예방 수칙, 등원 기준을 중랑구 상봉동 엠코소아청소년과의원이 정리했습니다.]]></description>
+      <pubDate>Sun, 19 Jul 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>아이 몸에 모기 물린 것 같은 두드러기가 번져요 — 소아 두드러기의 원인과 대처</title>
+      <title><![CDATA[아이 몸에 모기 물린 것 같은 두드러기가 번져요 — 소아 두드러기의 원인과 대처]]></title>
       <link>https://emcokids.co.kr/blog/urticaria-hives-care</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/urticaria-hives-care</guid>
-      <pubDate>Sun, 19 Jul 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>알레르기</category>
-      <description><![CDATA[생겼다 사라지기를 반복하는 소아 두드러기의 흔한 원인(감염·음식·물리 자극), 집에서의 대처, 입술 부음·호흡곤란 등 즉시 응급실에 가야 하는 신호를 정리했습니다.]]></description>
+      <description><![CDATA[부풀어 오른 발진이 생겼다 사라지기를 반복하는 두드러기는 소아에서 매우 흔합니다. 흔한 원인, 집에서의 대처, 그리고 입술 부음·호흡곤란 등 즉시 응급실에 가야 하는 신호를 중랑구 상봉동 엠코소아청소년과의원이 정리했습니다.]]></description>
+      <pubDate>Sun, 19 Jul 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>아이 귀 통증·보챔, 중이염일까 — 신호와 관리</title>
-      <link>https://emcokids.co.kr/blog/otitis-media</link>
-      <guid isPermaLink="true">https://emcokids.co.kr/blog/otitis-media</guid>
-      <pubDate>Thu, 02 Jul 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>감기·독감</category>
-      <description><![CDATA[감기 끝에 잘 따라오는 소아 중이염의 신호(귀 통증·보챔·열)와 가정 관리, 진료가 필요한 경우를 정리했습니다.]]></description>
+      <title><![CDATA[아이가 열나며 경련을 했다면 — 열성경련 대처와 꼭 알아야 할 것]]></title>
+      <link>https://emcokids.co.kr/blog/febrile-seizure</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/blog/febrile-seizure</guid>
+      <description><![CDATA[열성경련은 생후 6개월~5세 아이에게 비교적 흔하며 대부분 후유증 없이 회복됩니다. 경련 중 해야 할 것과 절대 하면 안 되는 것, 응급실에 가야 하는 신호를 정리했습니다.]]></description>
+      <pubDate>Thu, 16 Jul 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>아이가 변을 힘들어해요 — 소아 변비 신호와 관리</title>
-      <link>https://emcokids.co.kr/blog/constipation</link>
-      <guid isPermaLink="true">https://emcokids.co.kr/blog/constipation</guid>
-      <pubDate>Thu, 02 Jul 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>검진</category>
-      <description><![CDATA[소아 변비의 신호와 식이·배변 습관 관리, 진료가 필요한 경우를 정리했습니다.]]></description>
+      <title><![CDATA[아이 장염 — 토하고 설사할 때 탈수를 막는 법]]></title>
+      <link>https://emcokids.co.kr/blog/acute-gastroenteritis</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/blog/acute-gastroenteritis</guid>
+      <description><![CDATA[소아 급성 장염에서 가장 중요한 것은 탈수 관리입니다. 경구수액(ORS) 먹이는 요령, 굶기면 안 되는 이유, 탈수·응급 신호와 등원 기준을 정리했습니다.]]></description>
+      <pubDate>Thu, 16 Jul 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>우리 아이 예방접종 일정 한눈에 — 국가예방접종(NIP) 큰 틀</title>
-      <link>https://emcokids.co.kr/blog/vaccination-schedule</link>
-      <guid isPermaLink="true">https://emcokids.co.kr/blog/vaccination-schedule</guid>
-      <pubDate>Wed, 24 Jun 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>예방접종</category>
-      <description><![CDATA[국가예방접종(NIP) 일정의 큰 틀과 시기별 챙길 접종을 정리했습니다.]]></description>
+      <title><![CDATA[아이 감기가 열흘 넘게 간다면 — 소아 부비동염(축농증) 신호와 관리]]></title>
+      <link>https://emcokids.co.kr/blog/sinusitis</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/blog/sinusitis</guid>
+      <description><![CDATA[아이 콧물·기침이 10일 넘게 지속되거나 좋아지다 다시 나빠진다면 부비동염을 생각해야 합니다. 감기와 구분하는 신호, 항생제가 필요한 경우, 가정 관리 방법을 정리했습니다.]]></description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>중랑구 소아과 고르는 법 — 상봉·망우·면목 부모를 위한 선택 기준 가이드</title>
+      <title><![CDATA[우리 아이 사춘기가 너무 빠른 것 같다면 — 성조숙증 신호와 검사]]></title>
+      <link>https://emcokids.co.kr/blog/precocious-puberty</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/blog/precocious-puberty</guid>
+      <description><![CDATA[여아 8세 이전 가슴 발달, 남아 9세 이전 고환 발달은 성조숙증 평가 기준입니다. 부모가 관찰할 신호, 병원에서 하는 검사(골연령·호르몬), 진료가 필요한 시점을 정리했습니다.]]></description>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[중랑구 소아과 고르는 법 — 상봉·망우·면목 부모를 위한 선택 기준 가이드]]></title>
       <link>https://emcokids.co.kr/blog/jungnang-pediatrics-choosing-guide</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/jungnang-pediatrics-choosing-guide</guid>
-      <pubDate>Sat, 04 Jul 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>병원 선택</category>
-      <description><![CDATA[중랑구에서 아이 소아과를 고를 때 확인할 다섯 가지 기준 — 소아청소년과 전문의 여부, 야간·주말 진료 시간, 예방접종·영유아검진 관리, 아이 상황별 우선순위, 다닐 수 있는 동선을 정리했습니다.]]></description>
+      <description><![CDATA[중랑구에서 아이 소아과를 고를 때 확인할 기준을 정리했습니다. 소아청소년과 전문의 여부, 진료 시간(야간·주말), 예방접종·영유아검진 가능 여부, 우리 아이 상황별 우선순위까지 — 상봉동 엠코소아청소년과의원이 안내합니다.]]></description>
+      <pubDate>Sat, 04 Jul 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>환절기 우리 아이 아토피·알레르기비염, 집에서 어떻게 관리할까</title>
+      <title><![CDATA[아이 귀 통증·보챔, 중이염일까 — 신호와 관리]]></title>
+      <link>https://emcokids.co.kr/blog/otitis-media</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/blog/otitis-media</guid>
+      <description><![CDATA[아이의 귀 통증, 보챔, 발열 등은 소아 급성 중이염의 신호일 수 있습니다. 감기 후 나타나는 중이염의 증상과 경과 관찰, 항생제 사용 판단, 그리고 진료가 필요한 시점, 재발성 및 삼출성 중이염에 대해 알아봅니다.]]></description>
+      <pubDate>Thu, 02 Jul 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[아이가 변을 힘들어해요 — 소아 변비 신호와 관리]]></title>
+      <link>https://emcokids.co.kr/blog/constipation</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/blog/constipation</guid>
+      <description><![CDATA[소아 변비의 흔한 신호(딱딱한 변, 배변 회피, 복통, 드문 배변)와 효과적인 관리법을 알아봅니다. 식이, 수분, 배변 습관 관리가 중요하며, 이유식 및 기저귀 뗄 때 흔히 발생합니다. 체중 감소, 혈변, 심한 복통 등의 증상이 동반될 경우 진료가 필요할 수 있습니다.]]></description>
+      <pubDate>Thu, 02 Jul 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[상봉동소아과: 우리 아이 예방접종 일정 한눈에 — 국가예방접종(NIP) 큰 틀]]></title>
+      <link>https://emcokids.co.kr/blog/vaccination-schedule</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/blog/vaccination-schedule</guid>
+      <description><![CDATA[출생부터 만 12세까지 국가예방접종(NIP) 표준 일정의 큰 틀과 무료 지원, 접종을 놓쳤을 때 대처. 중랑구 상봉동 엠코소아청소년과의원(평일 야간·주말 진료).]]></description>
+      <pubDate>Wed, 24 Jun 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[환절기 우리 아이 아토피·알레르기비염, 집에서 어떻게 관리할까]]></title>
       <link>https://emcokids.co.kr/blog/atopy-allergy-care</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/atopy-allergy-care</guid>
-      <pubDate>Sat, 20 Jun 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>알레르기</category>
-      <description><![CDATA[환절기에 함께 심해지는 소아 아토피피부염과 알레르기비염의 가정 관리법(보습·환경관리)과 병원 진료가 필요한 신호를 정리했습니다. 중랑구 상봉·면목동 진료 안내 포함.]]></description>
+      <description><![CDATA[환절기에 함께 심해지는 소아 아토피피부염과 알레르기비염의 가정 관리법(보습·환경관리)과 병원 진료가 필요한 신호를 동네 소아과 의사의 시선으로 정리했습니다. 중랑구 상봉·면목동 진료 안내 포함.]]></description>
+      <pubDate>Sat, 20 Jun 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>수족구병, 어린이집은 언제부터 보내도 될까 — 등원중지 기준과 집에서 돌보기</title>
+      <title><![CDATA[수족구병, 어린이집은 언제부터 보내도 될까 — 등원중지 기준과 집에서 돌보기]]></title>
       <link>https://emcokids.co.kr/blog/hand-foot-mouth</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/hand-foot-mouth</guid>
-      <pubDate>Sat, 20 Jun 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>감염병</category>
-      <description><![CDATA[소아 수족구병의 증상과 전염 경로, 어린이집·유치원 등원중지 기준, 집에서 돌보는 법과 병원을 서둘러야 하는 응급신호(탈수·고열·무기력)를 정리했습니다.]]></description>
+      <description><![CDATA[소아 수족구병의 증상과 전염 경로, 어린이집·유치원 등원중지 기준, 집에서 돌보는 법과 병원을 서둘러야 하는 응급신호(탈수·고열·무기력)를 동네 소아과 의사가 정리했습니다. 중랑구 상봉동 진료 안내 포함.]]></description>
+      <pubDate>Sat, 20 Jun 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>상봉동 독감 예방접종: 아이와 부모, 온 가족 동시 접종 안전한가요?</title>
+      <title><![CDATA[상봉동소아과: 독감 예방접종, 우리 가족은 안전한가요?]]></title>
       <link>https://emcokids.co.kr/blog/flu-vaccine-family</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/flu-vaccine-family</guid>
-      <pubDate>Sun, 24 May 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>예방접종</category>
-      <description><![CDATA[아이와 부모님이 같은 시기에 독감 예방접종을 받아도 안전한지, NIP 무료 접종 대상자, 엠코소아청소년과의원의 접종 절차까지 정리했습니다.]]></description>
+      <description><![CDATA[독감 예방접종의 시기와 가족 단위 접종에서 고려할 점을 정리했습니다. 독감과 감기의 차이, 접종 전 확인하는 발열·컨디션 기준을 상봉동 엠코소아청소년과의원이 안내합니다.]]></description>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>예방접종 후 발열, 부기, 보챔: 보호자 가이드 및 응급 상황 대처법</title>
+      <title><![CDATA[예방접종 후 우리 아이 열, 걱정 마세요! 상봉동소아과가 답해드려요]]></title>
       <link>https://emcokids.co.kr/blog/post-vaccine-fever</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/post-vaccine-fever</guid>
-      <pubDate>Sun, 24 May 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>예방접종</category>
-      <description><![CDATA[접종 후 흔히 나타나는 미열·부위 부기·보챔 같은 정상 반응과 야간진료 또는 응급실로 가야 하는 위험 반응을 구분하는 보호자 체크리스트.]]></description>
+      <description><![CDATA[상봉동소아과 엠코소아청소년과의원에서 예방접종 후 발열 반응에 대해 자세히 알아보세요. 접종 후 미열, 식욕 부진 등 정상적인 반응과 고열, 경련 등 주의해야 할 이상 반응을 설명합니다. 엠코소아청소년과의원은 평일 야간 9시, 주말·주말에도 진료하며 우리 아이 건강을 위한 학술적 근거 기반 정보를 제공합니다.]]></description>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>상봉동 독감 신속검사 15분 가이드: 정확한 진단과 빠른 치료 시작</title>
+      <title><![CDATA[상봉동소아과: 독감 신속검사 15분, 엠코소아청소년과에서 정확하고 빠르게]]></title>
       <link>https://emcokids.co.kr/blog/flu-rapid-test</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/flu-rapid-test</guid>
-      <pubDate>Sun, 24 May 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>감기·독감</category>
-      <description><![CDATA[독감 신속검사가 필요한 상황, 검사 절차(코면봉·15분), 정확도와 한계, 검사 후 치료제 처방 흐름까지 임상 근거 기반으로 정리했습니다.]]></description>
+      <description><![CDATA[상봉동소아과 엠코소아청소년과의원에서 독감 신속검사로 15분 만에 빠르고 정확한 진단을 받으세요. 아이들에게 특히 위험한 독감의 조기 진단과 치료의 중요성을 강조하며, 평일 야간 20시, 토·일에도 진료하는 엠코소아청소년과의원의 차별화된 서비스를 제공합니다.]]></description>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>소아 감기, 독감, 비염: 우리 아이 증상, 어떻게 구분할까요?</title>
+      <title><![CDATA[콧물, 기침, 열… 감기? 독감? 알레르기 비염? 상봉동소아과에서 명확한 진단]]></title>
       <link>https://emcokids.co.kr/blog/cold-flu-symptoms</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/cold-flu-symptoms</guid>
-      <pubDate>Sun, 24 May 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>감기·독감</category>
-      <description><![CDATA[세 질환의 발열 양상·근육통·콧물 색·진행 속도·합병증 위험 비교. 부모가 집에서 1차 판단할 때 참고할 수 있는 체크리스트와 항생제·항바이러스제 사용 원칙.]]></description>
+      <description><![CDATA[상봉동소아과 엠코소아청소년과의원에서 감기, 독감, 알레르기 비염의 증상 구별법과 정확한 진단의 중요성을 알려드립니다. 콧물, 기침, 발열 등 아이의 호흡기 증상에 대한 전문적인 진료를 평일 야간 20시, 주말, 주말에도 주말 진료로 제공합니다. 서울 중랑구 망우로 353 C동 308호.]]></description>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>상봉동 엠코소아청소년과 영유아 검진: 우리 아이 건강 발달 친근 가이드</title>
+      <title><![CDATA[상봉동소아과: 친절하고 꼼꼼한 영유아 검진, 발달평가까지!]]></title>
       <link>https://emcokids.co.kr/blog/well-child-checkup</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/well-child-checkup</guid>
-      <pubDate>Sun, 24 May 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>검진</category>
-      <description><![CDATA[국가 영유아 검진 7회 일정, 각 시기의 발달 평가 항목, 검진 전 부모 준비물, 결과지 읽는 법, 발달 지연 의심 시 후속 절차까지.]]></description>
+      <description><![CDATA[상봉동소아과 엠코소아청소년과의원에서 친절하고 꼼꼼한 영유아 검진을 경험하세요. 아이의 운동, 언어, 인지, 사회성 발달평가까지 포함하며, 평일 야간 20시, 토·일 주말 진료로 바쁜 부모님들도 안심하고 방문하실 수 있습니다.]]></description>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>우리 아이 성장곡선 제대로 읽는 법과 키 성장 팁</title>
+      <title><![CDATA[상봉동소아과: 영유아·청소년 검진 결과, 키 성장 곡선 활용 및 가정 관리 7가지]]></title>
       <link>https://emcokids.co.kr/blog/growth-curve-tips</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/growth-curve-tips</guid>
-      <pubDate>Sun, 24 May 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>검진</category>
-      <description><![CDATA[표준 성장곡선 백분위 의미, '3 백분위 미만'·'97 백분위 초과' 해석, 키 평균치와 성장 속도의 차이, 수면·영양·운동의 실질적 영향, 성장 평가가 필요한 시점.]]></description>
+      <description><![CDATA[상봉동소아과 엠코소아청소년과의원에서 영유아·청소년 검진 결과, 키 성장 곡선 활용법과 가정 관리 7가지 방법을 알아보고 우리 아이의 건강한 성장을 지원하세요. 평일 야간, 주말, 주말 주말 진료로 언제든 아이 건강을 상담할 수 있습니다.]]></description>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
     </item>
-
     <item>
-      <title>상봉동소아과 야간진료 — 평일 20시·주말 진료 가이드와 활용법</title>
+      <title><![CDATA[엠코소아청소년과의원의 다섯 가지 약속]]></title>
+      <link>https://emcokids.co.kr/about</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/about</guid>
+      <description><![CDATA[엠코소아청소년과의원 다섯 가지 약속 — 평일 야간 20시, 일요일·공휴일 진료, 감기·독감 신속검사 15분, 예방접종 일정관리, 유신 원장님 직접 진료.]]></description>
+      <pubDate>Tue, 19 May 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[어떤 진료를 받을 수 있나요?]]></title>
+      <link>https://emcokids.co.kr/services</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/services</guid>
+      <description><![CDATA[엠코소아청소년과의원의 진료 서비스 — 감기·독감 신속검사 15분, 예방접종(국가필수+선택), 영유아 검진 7회, 키 성장 평가, 아토피·알레르기 진료, 청소년 검진.]]></description>
+      <pubDate>Tue, 19 May 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[진료시간]]></title>
+      <link>https://emcokids.co.kr/location</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/location</guid>
+      <description><![CDATA[엠코소아청소년과의원 위치 안내 — 서울 중랑구 망우로 353 C동 308호(상봉동, 현대프리미어스엠코). 망우역·상봉역 도보 5분. 평일 10~20시, 토·일 10~18시, 수 휴진.]]></description>
+      <pubDate>Tue, 19 May 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[엠코소아청소년과의원 FAQ]]></title>
+      <link>https://emcokids.co.kr/faq</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/faq</guid>
+      <description><![CDATA[엠코소아청소년과의원 자주 묻는 질문 — 진료 시간, 야간진료, 예방접종, 영유아 검진, 감기·독감 신속검사, 응급 상황 구분 안내.]]></description>
+      <pubDate>Tue, 19 May 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[엠코소아청소년과의원 블로그]]></title>
+      <link>https://emcokids.co.kr/blog</link>
+      <guid isPermaLink="true">https://emcokids.co.kr/blog</guid>
+      <description><![CDATA[유신 원장이 직접 작성·검수하는 부모님을 위한 건강 정보. 야간진료, 예방접종, 감기·독감, 영유아 검진, 키 성장 등 임상 기준 기반 의료 정보.]]></description>
+      <pubDate>Tue, 19 May 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[상봉동소아과 야간진료 — 평일 20시·주말 진료 가이드와 활용법]]></title>
       <link>https://emcokids.co.kr/blog/night-clinic-guide</link>
       <guid isPermaLink="true">https://emcokids.co.kr/blog/night-clinic-guide</guid>
-      <pubDate>Tue, 19 May 2026 00:00:00 +0900</pubDate>
-      <dc:creator>유신 원장</dc:creator>
-      <category>야간진료</category>
       <description><![CDATA[엠코소아청소년과의원은 평일 야간 20시, 토·일 17시까지 진료합니다. 야간진료가 적합한 증상, 응급실과의 구분 기준, 방문 전 체크리스트를 정리했습니다.]]></description>
+      <pubDate>Tue, 19 May 2026 00:00:00 +0000</pubDate>
     </item>
   </channel>
 </rss>

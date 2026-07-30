@@ -60,6 +60,7 @@ const CAROUSEL_LD = (() => {
 
 /** emcokids.co.kr 짧은 slug ↔ lumiaeo 긴 slug 매핑 (sitemap·firebase.json과 동기) */
 const SLUG_MAP = {
+  "growth-hormone-short-stature": "sangbong-peds-growth-hormone-short-stature-amco",
   "vaccination-schedule": "sangbong-peds-vaccination-standard-schedule-amco",
   "flu-vaccine-family": "sangbong-peds-vaccination-flu-family-pack-amco",
   "post-vaccine-fever": "sangbong-peds-vaccination-after-shot-symptoms-amco",
