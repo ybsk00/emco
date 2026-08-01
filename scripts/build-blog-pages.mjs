@@ -186,6 +186,14 @@ function renderHTML({ shortSlug, content }) {
 <html lang="ko">
 <head>
 <meta charset="UTF-8"/>
+<!-- ga4-tag G-PKQPJ8TS6R -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PKQPJ8TS6R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PKQPJ8TS6R');
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <meta name="theme-color" content="#FFF8F0" media="(prefers-color-scheme: light)"/>
 <meta name="theme-color" content="#4A3F35" media="(prefers-color-scheme: dark)"/>
